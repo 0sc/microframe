@@ -22,13 +22,13 @@ Gem::Specification.new do |spec|
   end
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
-  spec.bindir        = "exe"
-  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
+  spec.bindir        = "bin"
+  spec.executables   = %w{microframe}
   spec.require_paths = ["lib"]
 
   spec.add_runtime_dependency "bundler", "~> 1.10"
-  spec.add_runtime_dependency "thor"
-  spec.add_runtime_dependency "pry-nav"
-  spec.add_development_dependency "rake", "~> 10.0"
-  spec.add_development_dependency "minitest"
+  spec.add_runtime_dependency "thor", "~> 0.19.1"
+  spec.add_development_dependency "pry-nav", "~> 0.2.4"
+  spec.add_development_dependency "rake", '~> 10.4', '>= 10.4.2'
+  spec.add_development_dependency "minitest", '~> 5.8', '>= 5.8.3'
 end
