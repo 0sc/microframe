@@ -1,4 +1,6 @@
-require_relative "relationships"
+require File.join(__dir__,"query_utils")
+require File.join(__dir__,"instance_queries")
+require File.join(__dir__,"relationships")
 
 module Microframe
   module ORM

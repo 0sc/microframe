@@ -1,0 +1,9 @@
+require  "bundler"
+Bundler.require
+
+<%= app_name.capitalize %>Application = Microframe::Application.new
+
+require File.join(File.dirname(__FILE__), "config", "routes")
+
+use Rack::Reloader
+run <%= app_name.capitalize %>Application

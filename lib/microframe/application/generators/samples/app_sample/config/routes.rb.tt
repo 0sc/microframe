@@ -1,0 +1,7 @@
+<%= app_name.capitalize %>Application.routes.draw do
+  # resources :welcome
+
+  # get "/", to: "welcome#index"
+  # get "/index/:id/chief/", to: "welcome#show"
+  # get "/index/:id(/:di(/:ii(/params/:bb)))", to: "welcome#articles"
+end

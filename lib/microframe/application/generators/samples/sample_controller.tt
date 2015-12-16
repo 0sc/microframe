@@ -1,0 +1,8 @@
+class <%= name.capitalize %>Controller < Microframe::ApplicationController
+  <% if !xtras.empty? %>
+  <% xtras.each do |action| %>
+  def <%= action %>
+  end
+  <% end %>
+  <% end %>
+end

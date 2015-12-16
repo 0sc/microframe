@@ -62,7 +62,7 @@ module Microframe
       route = routes.split("/")
       paths = path.split("/")
 
-      return false if route.size < request.size
+      return false if route.size < paths.size
 
       route.each do |a|
         pending_match = true; matched = false; optional = 0;

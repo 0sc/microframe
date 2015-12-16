@@ -1,7 +1,5 @@
-require_relative "query_utils"
-require_relative "class_queries"
-require_relative "instance_queries"
-#require all model class here
+require File.join(__dir__,"class_queries")
+Dir[File.join(".", "app", "models", "*.rb")].each { |file| require file}
 
 module Microframe
   module ORM

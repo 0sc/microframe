@@ -17,9 +17,9 @@ module Microframe
       @view_rendered = true
       view = get_view(options[:view])
       layout = get_layout(options[:layout])
-
+      
       if(render_error?(view, layout))
-        response = Tilt.new(File.join(__dir__, "../../", "public", "404.html.erb"))
+        response = Tilt.new(File.join(".", "public", "404.html.erb"))
         response = response.render(Object.new, errors: @errors)
       else
         template = Tilt::ERBTemplate.new(layout)
@@ -44,16 +44,16 @@ module Microframe
 
      def get_view(view)
        view ||= default_render_option[:view]
-       file = File.join(__dir__, "../../", "app", "views", child, "#{view}.html.erb")
+       file = File.join(".", "app", "views", child, "#{view}.html.erb")
        unless File.file? file
-        file = File.join(__dir__, "../../", "app", "views", "#{view}.html.erb")
+        file = File.join(".", "app", "views", "#{view}.html.erb")
        end
        file
      end
 
      def get_layout(layout)
        layout ||= default_render_option[:layout]
-       File.join(File.dirname(__FILE__), "../../", "app", "views", "layout", layout + ".html.erb")
+       File.join(".", "app", "views", "layouts", layout + ".html.erb")
      end
 
      def set_instance_variables_for_views
