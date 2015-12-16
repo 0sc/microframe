@@ -17,7 +17,7 @@ module Microframe
       @view_rendered = true
       view = get_view(options[:view])
       layout = get_layout(options[:layout])
-
+      
       if(render_error?(view, layout))
         response = Tilt.new(File.join(".", "public", "404.html.erb"))
         response = response.render(Object.new, errors: @errors)

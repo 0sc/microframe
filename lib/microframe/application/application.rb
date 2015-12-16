@@ -5,6 +5,7 @@ module Microframe
     attr_reader :request, :routes
     def initialize
       @routes = Router.new
+      require File.join(__dir__, "..", "orm", "base")
     end
 
     def call(env)
