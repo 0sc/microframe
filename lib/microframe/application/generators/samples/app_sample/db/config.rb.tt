@@ -1,0 +1,7 @@
+module Microframe
+  module ORM
+    class Connection
+      @@dbname = "<%= app_name %>"
+    end
+  end
+end

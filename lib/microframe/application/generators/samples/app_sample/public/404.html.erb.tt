@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title><%= app_name.capitalize %> | Not Found</title>
+</head>
+<body>
+    <%%= errors.each { |error| puts error } %%>
+</body>
+</html>
