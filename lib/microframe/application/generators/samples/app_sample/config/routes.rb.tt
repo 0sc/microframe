@@ -1,4 +1,4 @@
-<%= app_name.capitalize %>.routes.draw do
+<%= app_name.capitalize %>Application.routes.draw do
   # resources :welcome
 
   # get "/", to: "welcome#index"
