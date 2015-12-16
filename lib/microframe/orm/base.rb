@@ -1,5 +1,5 @@
 require File.join(__dir__,"class_queries")
-#require all model class here
+Dir[File.join(".", "app", "models", "*.rb")].each { |file| require file}
 
 module Microframe
   module ORM

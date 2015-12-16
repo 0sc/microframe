@@ -5,6 +5,6 @@
     <title><%= app_name.capitalize %></title>
 </head>
 <body>
-    <%%= yield %%>
+    <%%= yield %>
 </body>
 </html>

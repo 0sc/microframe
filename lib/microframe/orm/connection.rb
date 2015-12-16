@@ -18,7 +18,7 @@ module Microframe
         end
 
         def connection
-          @@db || connect
+          @@db ||= connect
         end
 
         def execute(query)
