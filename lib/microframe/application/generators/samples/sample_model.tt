@@ -1,0 +1,10 @@
+class <%= name.capitalize %> < Microframe::ORM::Base
+  <% if !xtras.empty? %>
+  <% xtras.each do |pty| %>
+    <% pty = pty.split(":") %>
+    property :<%= pty.first %>, type: :<%= pty.last %>
+  <% end %>
+  create_table
+
+  <% end %>
+end
