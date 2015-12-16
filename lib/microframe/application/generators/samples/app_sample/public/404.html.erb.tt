@@ -5,6 +5,6 @@
     <title><%= app_name.capitalize %> | Not Found</title>
 </head>
 <body>
-    <%%= errors.each { |error| puts error } %%>
+    <%%= errors.each { |error| puts error } %>
 </body>
 </html>
