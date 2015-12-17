@@ -13,7 +13,7 @@ module Microframe
 
       def update(options = {})
         @save_queryset ||= {}
-        @save_queryset.merge(options)
+        @save_queryset.merge!(options)
         save
       end
       # def order

@@ -1,6 +1,10 @@
+require File.join(__dir__, "helpers")
+
 module Microframe
    class ApplicationController
-     attr_reader :request, :params, :view_rendered, :errors, :child, :action
+     include Helpers
+     attr_reader :request, :params, :view_rendered, :errors, :child, :action, :view_vars
+     attr_accessor :notice
 
      def initialize(request, child, action)
        @request = request
@@ -17,15 +21,15 @@ module Microframe
       @view_rendered = true
       view = get_view(options[:view])
       layout = get_layout(options[:layout])
-      
+
       if(render_error?(view, layout))
         response = Tilt.new(File.join(".", "public", "404.html.erb"))
         response = response.render(Object.new, errors: @errors)
       else
         template = Tilt::ERBTemplate.new(layout)
         view = Tilt::ERBTemplate.new(view)
-        vars = set_instance_variables_for_views
-        response = template.render(self, vars){ view.render(self, vars)}
+        @view_vars = set_instance_variables_for_views
+        response = template.render(self, view_vars){ view.render(self, view_vars)}
       end
 
       [200, {}, [response]]
@@ -54,6 +58,13 @@ module Microframe
      def get_layout(layout)
        layout ||= default_render_option[:layout]
        File.join(".", "app", "views", "layouts", layout + ".html.erb")
+     end
+
+     def render_partial(partial)
+       partial = partial.split("/")
+       partial[-1] = "_#{partial[-1]}"
+       partial = Tilt::ERBTemplate.new(get_view(partial.join("/")))
+       partial.render(self, view_vars)
      end
 
      def set_instance_variables_for_views

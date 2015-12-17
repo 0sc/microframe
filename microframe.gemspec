@@ -28,7 +28,7 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency "bundler", "~> 1.10"
   spec.add_runtime_dependency "thor", "~> 0.19.1"
-  spec.add_development_dependency "pry-nav", "~> 0.2.4"
+  spec.add_runtime_dependency "pry-nav", "~> 0.2.4"
   spec.add_development_dependency "rake", '~> 10.4', '>= 10.4.2'
   spec.add_development_dependency "minitest", '~> 5.8', '>= 5.8.3'
 end

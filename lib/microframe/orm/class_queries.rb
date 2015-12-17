@@ -52,7 +52,7 @@ module Microframe
           values = options.values
           placeholders = Array.new(values.size, "?").join(", ")
           Connection.connect.execute("INSERT INTO #{table_name} (#{keys}) VALUES (#{placeholders})", values)
-          self
+          self.last
         end
 
         def table_name
@@ -70,6 +70,7 @@ module Microframe
 
         def find_by(options = {})
           where(options)
+          fetch_result.first
         end
 
         def where(options = {})
@@ -89,12 +90,12 @@ module Microframe
 
         def first
           limit(1)
-          fetch_result
+          fetch_result.first
         end
 
         def last
           limit(1).order("id DESC")
-          fetch_result
+          fetch_result.first
         end
 
         def limit(val)

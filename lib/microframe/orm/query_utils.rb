@@ -65,7 +65,7 @@ module Microframe
           end
           hash_objects << obj
         end
-        result.size == 1 ? hash_objects.first : hash_objects
+        hash_objects
       end
     end
   end

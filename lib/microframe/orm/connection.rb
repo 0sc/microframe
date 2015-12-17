@@ -1,3 +1,5 @@
+require File.join(".", "db", "config")
+
 module Microframe
   module ORM
     class Connection
