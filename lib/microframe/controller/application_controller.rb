@@ -17,6 +17,11 @@ module Microframe
        { view: action, layout: "application" }
      end
 
+     def redirect_to(location)
+       @view_rendered = true
+       [302, {"Location" => location}, []]
+     end
+
      def render(options = {})
       @view_rendered = true
       view = get_view(options[:view])

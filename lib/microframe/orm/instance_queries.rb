@@ -16,17 +16,6 @@ module Microframe
         @save_queryset.merge!(options)
         save
       end
-      # def order
-      # end
-
-      # def limit
-      # end
-
-      # def offset
-      # end
-
-      # def update
-      # end
 
       def destroy
         query = "DELETE FROM #{table_name} WHERE id =#{id}"
@@ -34,8 +23,6 @@ module Microframe
           self
       end
 
-      # def group
-      # end
     end
   end
 end
