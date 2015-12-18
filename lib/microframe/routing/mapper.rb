@@ -11,10 +11,12 @@ module Microframe
 
     def map(verb, path)
       value = nil
-      routes[verb].each do |route, target|
-        if match_this(route, path)
-          value = target
-          break
+      if routes[verb]
+        routes[verb].each do |route, target|
+          if match_this(route, path)
+            value = target
+            break
+          end
         end
       end
       value
