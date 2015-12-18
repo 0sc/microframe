@@ -16,7 +16,7 @@ module Microframe
 
       return missing_path unless handler
 
-      @request.params.merge!(@mapper.placeholders)
+      request.params.merge!(@mapper.placeholders)
 
       response = setup_controller(handler)
       unless object.view_rendered
