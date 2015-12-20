@@ -3,6 +3,7 @@ module Microframe
     attr_reader :routes, :placeholders
     def initialize(routes)
       @routes = routes
+      @placeholders = {};
     end
 
     def self.start(route)
@@ -26,7 +27,7 @@ module Microframe
       found = false
       if a == b
         found = true
-      elsif a[0] == ":" && a[-1] != ")" && a[-1] != "("
+      elsif a[0] == ":" && a[-1] != ")" && a[-1] != "(" && !b.nil?
         @placeholders[a[1..-1].to_sym] = b
         found = true
       end
@@ -60,7 +61,7 @@ module Microframe
     end
 
     def match_this(routes, path)
-      match = []; @placeholders = {}; index = 0;
+      match = []; index = 0;
       route = routes.split("/")
       paths = path.split("/")
 
