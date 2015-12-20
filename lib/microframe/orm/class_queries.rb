@@ -4,6 +4,7 @@ require File.join(__dir__,"relationships")
 module Microframe
   module ORM
     class Base
+      @@create_table_query = []
       class << self
         include Relationships
 
@@ -12,17 +13,20 @@ module Microframe
         end
 
         def property(col_name, options = {})
-          @@create_table_query ||= []
           options[:type] = options[:type].to_s.upcase
           options[:nullable] = options[:nullable] ? "NULL" : "NOT NULL"
           options[:primary_key] = options[:primary_key] ? "PRIMARY KEY AUTOINCREMENT" : ""
-          @@create_table_query << col_name.to_s + " " + options.values.join(" ")
+          @@create_table_query << (col_name.to_s + " " + options.values.join(" "))
+        end
+
+        def get_create_table_query
+          @@create_table_query
         end
 
         def create_table
           query = "CREATE TABLE IF NOT EXISTS #{table_name} (#{@@create_table_query.join(", ")})"
           if Connection.execute(query)
-            @@create_table_query = nil
+            @@create_table_query = []
             define_attributes
           end
         end
