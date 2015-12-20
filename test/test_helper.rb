@@ -1,10 +1,11 @@
+require "simplecov"
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 path = File.join(__dir__,"..", "lib", "microframe")
 
 Dir[File.join(path, "**")].each{ |file| $LOAD_PATH << file  }
-$LOAD_PATH << File.expand_path("unit_tests/", __dir__)
 require 'minitest/autorun'
+require File.join(__dir__, "unit_tests", "utils.rb")
 
 SampleRoutesWithPlaceholders =  {"PUT"=>{"/lists/:list_id/items/:id"=>{:controller=>"items", :action=>"update"}},
  "DELETE"=>
@@ -18,3 +19,7 @@ SampleRoutes = {"GET"=>
   {"/lists/new"=>{:controller=>"lists", :action=>"new"},
    "/lists/:id"=>{:controller=>"lists", :action=>"show"}},
  "PATCH"=>{"/lists/:id"=>{:controller=>"lists", :action=>"update"}}}
+
+ class Minitest::Test
+   include Utils
+ end

@@ -17,7 +17,7 @@ module Microframe
       end
 
       def process_from(queryhash)
-        queryhash["FROM"] ||= @table_name
+        queryhash["FROM"] ||= table_name
         "FROM #{queryhash["FROM"]}"
       end
 

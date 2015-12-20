@@ -1,9 +1,7 @@
 require "test_helper"
 require "mapper"
-require "utils"
 
 class MapperTest < Minitest::Test
-  include Utils
   def setup
     @mapper = Microframe::Mapper.new(SampleRoutes)
   end

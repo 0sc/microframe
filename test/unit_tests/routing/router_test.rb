@@ -1,11 +1,8 @@
 require "test_helper"
 require "router"
 require "mapper"
-require "utils"
-
 
 class RouterTest < Minitest::Test
-  include Utils
   def setup
     @router = Microframe::Router.new
     @router.request = Object.new

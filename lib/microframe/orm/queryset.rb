@@ -5,6 +5,8 @@ module Microframe
     class Queryset
       include QueryUtils
 
+      attr_reader :queryset
+
       def initialize(model)
         @queryset = {}
         @table_name = model.table_name
@@ -12,13 +14,13 @@ module Microframe
       end
 
       def where(options)
-        sql = ""
+        sql = []
         options.each {|key, val| sql << "#{key.to_s} = '#{val}'"}
-        add_query("WHERE",  sql)
+        add_query("WHERE",  sql.join(" AND "))
       end
 
       def all(val = "*")
-        add_query("SELECT", "#{val}") unless @queryset["SELECT"]
+        add_query("SELECT", "#{val}") unless queryset["SELECT"]
         fetch
       end
 
@@ -46,12 +48,12 @@ module Microframe
 
       def add_query(field, condition)
         @queryset ||= {}
-        @queryset[field] = @queryset[field] ?  @queryset[field] << condition : [condition]
+        @queryset[field] = queryset[field] ?  queryset[field] << condition : [condition]
         self
       end
 
       def fetch
-        result = process_query(@queryset)
+        result = process_query(queryset)
         @queryset = {}
         parse_result_to_objects(result)
       end
