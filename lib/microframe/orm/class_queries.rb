@@ -1,18 +1,14 @@
-require File.join(__dir__,"query_utils")
-require File.join(__dir__,"instance_queries")
+require File.join(__dir__,"queryset")
 require File.join(__dir__,"relationships")
 
 module Microframe
   module ORM
     class Base
-      @@queryset = {}
       class << self
-        include QueryUtils
         include Relationships
 
         def inherited(base)
           base.include InstanceQueries
-          base.include QueryUtils
         end
 
         def property(col_name, options = {})
@@ -52,7 +48,7 @@ module Microframe
           values = options.values
           placeholders = Array.new(values.size, "?").join(", ")
           Connection.connect.execute("INSERT INTO #{table_name} (#{keys}) VALUES (#{placeholders})", values)
-          self
+          self.last
         end
 
         def table_name
@@ -60,51 +56,43 @@ module Microframe
         end
 
         def all
-          add_query("SELECT", "*") unless @@queryset && @@queryset["SELECT"]
-          fetch_result
+          init_queryset(:select, "*").fetch
         end
 
         def find(id)
-          find_by(id: id)
+          find_by(id: id).fetch.first
         end
 
-        def find_by(options = {})
-          where(options)
+        def find_by(options)
+          init_queryset(:find_by, options).fetch.first
         end
 
-        def where(options = {})
-          sql = ""
-          options.each {|key, val| sql << "#{key.to_s} = '#{val}'"}
-          add_query("WHERE",  sql)
+        def where(options)
+          init_queryset(:where, options)
         end
 
         def select(val)
-          add_query("SELECT", val)
+          init_queryset(:select, val)
         end
 
         def count
-          result = all
-          result.size
+          all.fetch.size
         end
 
         def first
-          limit(1)
-          fetch_result
+          limit(1).fetch.first
         end
 
         def last
-          limit(1).order("id DESC")
-          fetch_result
+          limit(1).order("id DESC").fetch.first
         end
 
         def limit(val)
-          @@queryset["LIMIT"] = val
-          self
+          init_queryset(:limit, val)
         end
 
         def order(val)
-          @@queryset["ORDER BY"] = val
-          self
+          init_queryset(:limit, val)
         end
 
         def destroy(id)
@@ -113,19 +101,12 @@ module Microframe
 
         def destroy_all(xtra = "; VACUUM")
           query = "DELETE FROM #{table_name} #{xtra}"
-          execute(query)
+          Connection.connect.execute(query)
           self
         end
 
-        def update_queryset(key, value)
-          @@queryset ||= {}
-          @@queryset[key] = @@queryset[key] ?  @@queryset[key] << value : [value]
-        end
-
-        def fetch_result
-          result = process_query(@@queryset)
-          @@queryset = {}
-          parse_result_to_objects(result)
+        def init_queryset(mtd, option)
+          Queryset.new(self).send(mtd, option)
         end
       end
     end

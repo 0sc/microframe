@@ -1,11 +1,6 @@
 module Microframe
   module ORM
     module QueryUtils
-      def add_query(key, value)
-        update_queryset(key, value)
-        self
-      end
-
       def process_query(queryset)
         return unless queryset
         query = build_query(queryset)
@@ -22,8 +17,8 @@ module Microframe
       end
 
       def process_from(queryhash)
-        queryhash["FROM"] ||= self.to_s.downcase
-        "FROM #{queryhash["FROM"]}s"
+        queryhash["FROM"] ||= @table_name
+        "FROM #{queryhash["FROM"]}"
       end
 
       def process_where(queryhash)
@@ -57,7 +52,7 @@ module Microframe
       def parse_result_to_objects(result)
         hash_objects = []
         result.each do |hash|
-          obj = self.new
+          obj = @model.new
           hash.each do |key, val|
             if key.is_a? String
               obj.instance_variable_set("@#{key}", val)
@@ -65,7 +60,7 @@ module Microframe
           end
           hash_objects << obj
         end
-        result.size == 1 ? hash_objects.first : hash_objects
+        hash_objects
       end
     end
   end

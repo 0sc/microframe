@@ -13,6 +13,7 @@ module Microframe
     def handle_request(verb, path)
       @mapper ||= Mapper.start(route)
       handler = @mapper.map(verb, path) #get_handler(verb, path)
+
       return missing_path unless handler
 
       @request.params.merge!(@mapper.placeholders)
@@ -56,7 +57,8 @@ module Microframe
       get("/#{name}/:id/edit", to: "#{name}#edit")
       post("/#{name}", to: "#{name}#create")
       patch("/#{name}/:id", to: "#{name}#update")
-      delete("/name/:id", to: "#{name}#destroy")
+      put("/#{name}/:id", to: "#{name}#update")
+      delete("/#{name}/:id", to: "#{name}#destroy")
     end
 
     private

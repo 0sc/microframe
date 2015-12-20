@@ -1,4 +1,5 @@
 class <%= name.capitalize %> < Microframe::ORM::Base
+  property :id, type: :integer, primary_key: true
   <% if !xtras.empty? %>
   <% xtras.each do |pty| %>
     <% pty = pty.split(":") %>

@@ -14,21 +14,22 @@ module Microframe
     def new(name)
       @app_name = name
       directory("app_sample", "#{app_name}")
+      init_with_shell_cmds
     end
 
     desc "generate TYPE NAME OPTIONS", "Generates microframe resource of TYPE (i.e. model, controller or view) with the given NAME extra options specific to TYPE can also be provided"
     def generate(type, name, *xtras)
       @type = type.downcase
       @name = name.downcase
-      @xtras = xtras
+      @xtras ||= xtras
 
       if type == "controller"
         template("sample_controller.tt", File.join(target_root, "controllers", "#{name}_controller.rb"))
-        generate("view", name)
+        create_views
       elsif type == "model"
         template("sample_model.tt", File.join(target_root, "models", "#{name}.rb"))
       elsif type == "view"
-        directory("folder", File.join(target_root, "views", "name"))
+        create_views
       end
     end
 
@@ -43,5 +44,15 @@ module Microframe
       "app/"
     end
 
+    def create_views
+      empty_directory(File.join(target_root, "views", name))
+      xtras.each { |f| template("blank.tt", File.join(target_root, "views", name, "#{f}.html.erb")) }
+    end
+
+    def init_with_shell_cmds
+      Dir.chdir(app_name)
+      run "bundle install"
+      run "git init"
+    end
   end
 end
