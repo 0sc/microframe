@@ -8,7 +8,7 @@ module Microframe
         values = save_queryset.values
         @save_queryset = nil
         placeholders = Array.new(values.size, "?").join(", ")
-        result = execute("REPLACE INTO #{table_name} (#{keys}) VALUES (#{placeholders})", values)
+        result = Connection.connection.execute("REPLACE INTO #{table_name} (#{keys}) VALUES (#{placeholders})", values)
         result ? self.class.last : self
       end
 

@@ -30,21 +30,21 @@ module Microframe
 
     def submit
       output = ""
-      output += "<input type='hidden' name='_method' value='put'>" if target_id
-      output += "<input type='submit' value = 'save' />"
+      output += "<input type = 'hidden' name = '_method' value = 'put'/>" if target_id
+      output += "<input type = 'submit' value = 'save' />"
       output += "</form>"
       gatekeeper output
     end
 
     def check_box(name, val=nil)
       val ||= target.send(name)
-      gatekeeper "<input type='checkbox' name='#{target_name}[#{name}]' checked = '#{val}' value = 'true'/>"
+      gatekeeper "<input type = 'checkbox' name = '#{target_name}[#{name}]' checked = '#{val}' value = 'true'/>"
     end
 
     def hidden(val)
       name = val.class.to_s.downcase
       val = val.id
-      gatekeeper "<input type='hidden' name='#{name}_id' value = '#{val}' />"
+      gatekeeper "<input type = 'hidden' name = '#{name}_id' value = '#{val}'/>"
     end
 
     def gatekeeper(output)

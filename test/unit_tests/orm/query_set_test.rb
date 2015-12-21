@@ -18,7 +18,7 @@ class QuerysetTest < Minitest::Test
     end
   end
 
-  def test_all_method_with_args
+  def test_the_all_method_with_args
     @util.stub(:fetch, "fetching")do
       assert_equal "fetching", @util.all("name")
       assert_equal @util.queryset["SELECT"], ["name"]

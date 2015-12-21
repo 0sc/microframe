@@ -6,3 +6,8 @@ module Utils
     # end
   end
 end
+
+class Request
+  def self.params
+  end
+end
