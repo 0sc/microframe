@@ -5,7 +5,7 @@ module Microframe
     class Queryset
       include QueryUtils
 
-      attr_reader :queryset
+      attr_reader :queryset, :table_name
 
       def initialize(model)
         @queryset = {}

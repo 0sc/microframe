@@ -1,10 +1,10 @@
 require File.join(__dir__, "helpers")
+require File.join(__dir__, "view_object")
 
 module Microframe
    class ApplicationController
      include Helpers
      attr_reader :request, :params, :view_rendered, :errors, :child, :action, :view_vars
-     attr_accessor :notice
 
      def initialize(request, child, action)
        @request = request
@@ -26,15 +26,14 @@ module Microframe
       @view_rendered = true
       view = get_view(options[:view])
       layout = get_layout(options[:layout])
-
+      obj = set_up_view_object
       if(render_error?(view, layout))
         response = Tilt.new(File.join(".", "public", "404.html.erb"))
-        response = response.render(Object.new, errors: @errors)
+        response = response.render(obj, errors: @errors)
       else
         template = Tilt::ERBTemplate.new(layout)
         view = Tilt::ERBTemplate.new(view)
-        @view_vars = set_instance_variables_for_views
-        response = template.render(self, view_vars){ view.render(self, view_vars)}
+        response = template.render(obj){ view.render(obj)}
       end
 
       [200, {}, [response]]
@@ -51,7 +50,7 @@ module Microframe
        @errors.size > 0
      end
 
-     def get_view(view)
+     def get_view(view = nil)
        view ||= default_render_option[:view]
        file = File.join(".", "app", "views", child, "#{view}.html.erb")
        unless File.file? file
@@ -60,7 +59,7 @@ module Microframe
        file
      end
 
-     def get_layout(layout)
+     def get_layout(layout = nil)
        layout ||= default_render_option[:layout]
        File.join(".", "app", "views", "layouts", layout + ".html.erb")
      end
@@ -69,7 +68,7 @@ module Microframe
        partial = partial.split("/")
        partial[-1] = "_#{partial[-1]}"
        partial = Tilt::ERBTemplate.new(get_view(partial.join("/")))
-       partial.render(self, view_vars)
+       partial.render(self)
      end
 
      def set_instance_variables_for_views
@@ -81,7 +80,15 @@ module Microframe
      end
 
      def protected_instance_variables_for_views
-       [@request]
+       [:@request, :@action, :@view_rendered, :@child]
+     end
+
+     def set_up_view_object
+       obj = ViewObject.new(self)
+       obj.instance_exec(set_instance_variables_for_views) do |inst_vars|
+         inst_vars.each{|key, value| instance_variable_set("@#{key}", value) }
+       end
+       obj
      end
    end
 end

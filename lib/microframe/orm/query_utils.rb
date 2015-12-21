@@ -8,7 +8,7 @@ module Microframe
       end
 
       def execute(query)
-        Microframe::ORM::Connection.execute(query)
+        Connection.execute(query)
       end
 
       def process_select(queryhash)

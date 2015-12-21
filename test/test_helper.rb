@@ -1,4 +1,5 @@
 require "simplecov"
+SimpleCov.start
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 path = File.join(__dir__,"..", "lib", "microframe")
