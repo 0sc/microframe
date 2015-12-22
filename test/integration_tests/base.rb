@@ -6,8 +6,6 @@ require "sqlite3"
 require "erb"
 require "tilt"
 require "tilt/erb"
-require "pry-nav"
-require "faker"
 require_relative "checklist/test"
 
 class CapybaraTestCase < Minitest::Test
