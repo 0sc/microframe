@@ -34,5 +34,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "minitest", '~> 5.8', '>= 5.8.3'
   spec.add_development_dependency "capybara"
   spec.add_development_dependency "sqlite3"
+  spec.add_development_dependency "tilt"
   spec.add_development_dependency "simplecov"#, '~> 5.8', '>= 0.10.0'
 end
