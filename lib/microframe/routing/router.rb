@@ -78,7 +78,7 @@ module Microframe
     end
 
     def get_handler_file(controller)
-      require File.join(".", "app", "controllers",  controller + "_controller")
+      require File.join(APP_PATH, "app", "controllers",  controller + "_controller")
     end
 
     def missing_path
