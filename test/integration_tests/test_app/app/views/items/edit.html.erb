@@ -1,0 +1,6 @@
+<h1>Editing Item</h1>
+
+<%= render_partial 'form' %>
+
+<%= link_to 'Show', "/lists/#{@list.id}/items/#{@item.id}" %> |
+<%= link_to 'Back', "/lists/#{@list.id}/items" %>

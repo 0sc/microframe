@@ -6,7 +6,7 @@ require "sqlite3"
 require "erb"
 require "tilt"
 require "tilt/erb"
-require_relative "checklist/test"
+require_relative "test_app/test"
 
 class CapybaraTestCase < Minitest::Test
   include Capybara::DSL

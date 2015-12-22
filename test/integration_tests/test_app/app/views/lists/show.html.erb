@@ -1,0 +1,12 @@
+<p>
+  <strong>Name:</strong>
+  <%= @list.name %>
+  <ul>
+    <% @items.each do |item| %>
+      <li><%= item.description %> <span><%= link_to "more >>", "/lists/#{@list.id}/items/#{item.id}"%></span></li>
+    <% end %>
+  </ul>
+</p>
+
+<%= link_to 'Edit list', "/lists/#{@list.id}/edit" %> | <%= link_to 'Add item', "/lists/#{@list.id}/items/new" %> |
+<%= link_to 'Back', "/lists" %>
