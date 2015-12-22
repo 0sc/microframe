@@ -1,0 +1,18 @@
+<p>
+  <strong>list:</strong>
+  <%= @list.name %>
+</p>
+
+<p>
+  <strong>description:</strong>
+  <%= @item.description %>
+</p>
+
+<p>
+  <strong>Done:</strong>
+  <%= @item.done %>
+</p>
+
+<%= link_to 'Edit', "/lists/#{@list.id}/items/#{@item.id}/edit" %> |
+<%= link_to 'Delete', "/lists/#{@list.id}/items/#{@item.id}", method: :delete %> |
+<%= link_to 'Back', "/lists/#{@list.id}/items" %>

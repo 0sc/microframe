@@ -1,0 +1,10 @@
+<% form_for(@list) do |f| %>
+
+
+  <div class="field">
+    <%= f.label("Name") %><br>
+    <div><%= f.text_field :name %>
+      <%= f.submit %>
+    </div>
+  </div>
+<% end %>

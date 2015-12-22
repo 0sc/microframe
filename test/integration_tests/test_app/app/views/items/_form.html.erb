@@ -1,0 +1,16 @@
+<% @form_link = "/lists/#{@list.id}/items/" %>
+<% @form_link += "#{@item.id}" if @item.id %>
+
+<% form_for(@item, @form_link) do |f| %>
+
+  <div class="field">
+
+    <%= f.label :description %><br>
+    <%= f.text_area :description %><br />
+
+    <%= f.check_box :done %>
+    <%= f.label :done %><br>
+    <%= f.hidden @list %>
+    <%= f.submit %>
+  </div>
+<% end %>
