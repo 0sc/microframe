@@ -1,28 +1,32 @@
 module Microframe
   module ORM
     module InstanceQueries
+      include QueryUtils
       def save
         @save_queryset["id"] = id
-        keys = @save_queryset.keys.join(", ")
-        values = @save_queryset.values
+        keys = save_queryset.keys.join(", ")
+        values = save_queryset.values
         @save_queryset = nil
         placeholders = Array.new(values.size, "?").join(", ")
-        result = Microframe::ORM::Connection.connect.execute("REPLACE INTO #{table_name} (#{keys}) VALUES (#{placeholders})", values)
+        result = Connection.connection.execute("REPLACE INTO #{table_name} (#{keys}) VALUES (#{placeholders})", values)
         result ? self.class.last : self
       end
 
       def update(options = {})
         @save_queryset ||= {}
-        @save_queryset.merge!(options)
+        save_queryset.merge!(options)
         save
       end
 
       def destroy
         query = "DELETE FROM #{table_name} WHERE id =#{id}"
-          execute(query)
-          self
+        execute(query)
+        self
       end
 
+      def save_queryset
+        @save_queryset
+      end
     end
   end
 end

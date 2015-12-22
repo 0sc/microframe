@@ -1,7 +1,7 @@
 require File.join(__dir__,"class_queries")
 require File.join(__dir__,"instance_queries")
 
-Dir[File.join(".", "app", "models", "*.rb")].each { |file| require file}
+Dir[File.join(APP_PATH, "app", "models", "*.rb")].each { |file| require file}
 
 module Microframe
   module ORM

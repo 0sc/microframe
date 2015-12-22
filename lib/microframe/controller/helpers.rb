@@ -6,10 +6,7 @@ module Microframe
       if options[:method]
         target = target.is_a?(String) ? target : "/#{target.class.to_s.downcase}s/#{target.id}"
 
-        "<form action='#{target}' method='post'>
-          <input type='hidden' name='_method' value='#{options[:method]}'/>
-          <input type='submit' value='#{link}' />
-        </form>"
+        "<form action='#{target}' method='post'><input type='hidden' name='_method' value='#{options[:method]}'/><input type='submit' value='#{link}' /></form>"
       else
         data_options = ""
         options[:data].each { |key, val| data_options << "data-#{key}='#{val}'"} if options[:data]
@@ -21,6 +18,16 @@ module Microframe
       yield(FormHelper.new(target, link))
     end
 
+    def image_tag(image, ext = "png")
+      File.join(APP_PATH, "app", "assets", "images", "#{image}.#{ext}")
+    end
 
+    def javascript_tag(js)
+      File.join(APP_PATH, "app", "assets", "javascripts", "#{js}.js")
+    end
+
+    def stylesheet_tag(style, ext = "css")
+      File.join(APP_PATH, "app", "assets", "stylesheets", "#{style}.#{ext}")
+    end
   end
 end

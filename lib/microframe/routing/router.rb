@@ -16,7 +16,7 @@ module Microframe
 
       return missing_path unless handler
 
-      @request.params.merge!(@mapper.placeholders)
+      request.params.merge!(@mapper.placeholders)
 
       response = setup_controller(handler)
       unless object.view_rendered
@@ -78,7 +78,7 @@ module Microframe
     end
 
     def get_handler_file(controller)
-      require File.join(".", "app", "controllers",  controller + "_controller")
+      require File.join(APP_PATH, "app", "controllers",  controller + "_controller")
     end
 
     def missing_path
