@@ -28,16 +28,16 @@ class HelpersTest < Minitest::Test
   end
 
   def test_javascript_tag
-    assert_equal "./app/assets/javascripts/script.js", @help.javascript_tag("script")
+    assert_equal "#{APP_PATH}/app/assets/javascripts/script.js", @help.javascript_tag("script")
   end
 
   def test_image_tag
-    assert_equal "./app/assets/images/image.png", @help.image_tag("image")
-    assert_equal "./app/assets/images/image.jpg", @help.image_tag("image", "jpg")
+    assert_equal "#{APP_PATH}/app/assets/images/image.png", @help.image_tag("image")
+    assert_equal "#{APP_PATH}/app/assets/images/image.jpg", @help.image_tag("image", "jpg")
   end
 
   def test_stylesheet_tag
-    assert_equal "./app/assets/stylesheets/style.css", @help.stylesheet_tag("style")
-    assert_equal "./app/assets/stylesheets/style.scss", @help.stylesheet_tag("style", "scss")
+    assert_equal "#{APP_PATH}/app/assets/stylesheets/style.css", @help.stylesheet_tag("style")
+    assert_equal "#{APP_PATH}/app/assets/stylesheets/style.scss", @help.stylesheet_tag("style", "scss")
   end
 end

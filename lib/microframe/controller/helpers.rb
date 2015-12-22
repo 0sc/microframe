@@ -19,15 +19,15 @@ module Microframe
     end
 
     def image_tag(image, ext = "png")
-      File.join(".", "app", "assets", "images", "#{image}.#{ext}")
+      File.join(APP_PATH, "app", "assets", "images", "#{image}.#{ext}")
     end
 
     def javascript_tag(js)
-      File.join(".", "app", "assets", "javascripts", "#{js}.js")
+      File.join(APP_PATH, "app", "assets", "javascripts", "#{js}.js")
     end
 
     def stylesheet_tag(style, ext = "css")
-      File.join(".", "app", "assets", "stylesheets", "#{style}.#{ext}")
+      File.join(APP_PATH, "app", "assets", "stylesheets", "#{style}.#{ext}")
     end
   end
 end

@@ -40,11 +40,11 @@ class ApplicationControllerTest < Minitest::Test
   end
 
   def test_get_layout_returns_given_file
-    assert_equal @app.get_layout(__FILE__), File.join(".", "app", "views", "layouts", "#{__FILE__}.html.erb")
+    assert_equal @app.get_layout(__FILE__), File.join(APP_PATH, "app", "views", "layouts", "#{__FILE__}.html.erb")
   end
 
   def test_get_layout_returns_default
-    assert_equal @app.get_layout, File.join(".", "app", "views", "layouts", "application.html.erb")
+    assert_equal @app.get_layout, File.join(APP_PATH, "app", "views", "layouts", "application.html.erb")
   end
 
   def test_set_instance_variables_for_views

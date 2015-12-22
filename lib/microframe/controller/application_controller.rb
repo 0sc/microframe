@@ -27,8 +27,11 @@ module Microframe
       view = get_view(options[:view])
       layout = get_layout(options[:layout])
       obj = set_up_view_object
+      status = 200
+
       if(render_error?(view, layout))
-        response = Tilt.new(File.join(".", "public", "404.html.erb"))
+        response = Tilt.new(File.join(APP_PATH, "public", "404.html.erb"))
+        status = 404
         response = response.render(obj, errors: @errors)
       else
         template = Tilt::ERBTemplate.new(layout)
@@ -36,7 +39,7 @@ module Microframe
         response = template.render(obj){ view.render(obj)}
       end
 
-      [200, {}, [response]]
+      [status, {}, [response]]
      end
 
      def render_view
@@ -52,16 +55,16 @@ module Microframe
 
      def get_view(view = nil)
        view ||= default_render_option[:view]
-       file = File.join(".", "app", "views", child, "#{view}.html.erb")
+       file = File.join(APP_PATH, "app", "views", child, "#{view}.html.erb")
        unless File.file? file
-        file = File.join(".", "app", "views", "#{view}.html.erb")
+        file = File.join(APP_PATH, "app", "views", "#{view}.html.erb")
        end
        file
      end
 
      def get_layout(layout = nil)
        layout ||= default_render_option[:layout]
-       File.join(".", "app", "views", "layouts", layout + ".html.erb")
+       File.join(APP_PATH, "app", "views", "layouts", layout + ".html.erb")
      end
 
      def render_partial(partial)

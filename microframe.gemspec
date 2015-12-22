@@ -26,10 +26,14 @@ Gem::Specification.new do |spec|
   spec.executables   = %w{microframe}
   spec.require_paths = ["lib"]
 
+  spec.add_runtime_dependency "rack", "~> 1.6", ">= 1.6.4"
   spec.add_runtime_dependency "bundler", "~> 1.10"
   spec.add_runtime_dependency "thor", "~> 0.19.1"
   spec.add_development_dependency "pry-nav", "~> 0.2.4"
   spec.add_development_dependency "rake", '~> 10.4', '>= 10.4.2'
   spec.add_development_dependency "minitest", '~> 5.8', '>= 5.8.3'
+  spec.add_development_dependency "capybara"
+  spec.add_development_dependency "sqlite3"
+  spec.add_development_dependency "faker"
   spec.add_development_dependency "simplecov"#, '~> 5.8', '>= 0.10.0'
 end
