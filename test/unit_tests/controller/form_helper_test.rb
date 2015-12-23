@@ -1,10 +1,7 @@
 require "test_helper"
 require "form_helper"
 require "base"
-
-class Sample < Microframe::ORM::Base
-  def id; 123; end
-end
+require "mock_objects"
 
 class FormHelperTest < Minitest::Test
   def setup

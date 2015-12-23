@@ -7,7 +7,11 @@ class ListsController < Microframe::ApplicationController
 
   def show
     set_list
-    @items = @list.items.all
+    if @list
+      @items = @list.items.all
+    else
+      redirect_to "/lists"
+    end
   end
 
   def new
@@ -46,7 +50,7 @@ class ListsController < Microframe::ApplicationController
   private
 
   def set_list
-    @list = List.find_by(id: params[:id])
+    @list = List.find(params[:id])
   end
 
   def list_params

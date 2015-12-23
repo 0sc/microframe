@@ -28,9 +28,4 @@ class ApplicationTest < CapybaraTestCase
     end
     assert_equal 404, page.status_code
   end
-
-  def test_visit_items_with_wrong_params_redirect_to_home
-    # visit "/lists/id/items/"
-    # assert page.current_path, "/lists/id"
-  end
 end

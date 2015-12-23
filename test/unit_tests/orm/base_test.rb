@@ -1,8 +1,6 @@
 require "test_helper"
 require "base"
-
-class Sample < Microframe::ORM::Base
-end
+require "mock_objects"
 
 class BaseTest < Minitest::Test
   def setup
@@ -15,14 +13,5 @@ class BaseTest < Minitest::Test
 
   def test_it_includes_instance_queries
     [:save, :update, :destroy].each { |q| assert_respond_to @base, q}
-  end
-
-  def test_update
-    @base.stub(:save, "saved")do
-      assert_nil @base.save_queryset
-      assert_equal "saved", @base.update(name: "newname")
-      refute_nil @base.save_queryset
-      assert_equal @base.save_queryset, name: "newname"
-    end
   end
 end

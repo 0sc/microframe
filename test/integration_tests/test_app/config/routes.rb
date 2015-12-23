@@ -14,6 +14,7 @@ ChecklistApplication.routes.draw do
 
   get "/missing_view", to: "lists#test_view"
   get "/missing_layout", to: "lists#test_layout"
+  get "/queries/:list_id/:id", to: "items#queries"
   # get "/", to: "welcome#index"
   # get "/index/:id/chief/", to: "welcome#show"
   # get "/index/:id(/:di(/:ii(/params/:bb)))", to: "welcome#articles"

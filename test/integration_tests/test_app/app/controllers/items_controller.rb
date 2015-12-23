@@ -34,6 +34,15 @@ class ItemsController < Microframe::ApplicationController
     redirect_to ("/lists/#{params[:list_id]}")
   end
 
+  def queries
+    set_item
+    if @list || params[:list_id].to_i > 0
+      @item = List.first.items.all
+    else
+      redirect_to "/lists"
+    end
+  end
+
   private
 
   def set_list
@@ -42,7 +51,7 @@ class ItemsController < Microframe::ApplicationController
 
   def set_item
     set_list
-    @item = @list.items.find_by(id: params[:id]).load
+    @item = @list.items.find_by(id: params[:id]).load if @list
   end
 
   def item_params
