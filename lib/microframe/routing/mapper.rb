@@ -23,33 +23,33 @@ module Microframe
       value
     end
 
-    def match_components(a, b)
+    def match_components(defined_elt, incoming_elt)
       found = false
-      if a == b
+      if defined_elt == incoming_elt
         found = true
-      elsif a[0] == ":" && a[-1] != ")" && a[-1] != "(" && !b.nil?
-        @placeholders[a[1..-1].to_sym] = b
+      elsif defined_elt[0] == ":" && defined_elt[-1] != ")" && defined_elt[-1] != "(" && !incoming_elt.nil?
+        @placeholders[defined_elt[1..-1].to_sym] = incoming_elt
         found = true
       end
       return found
     end
 
-    def match_begin_of_optional_components(a, optional)
-      if a[-1] == "("
+    def match_begin_of_optional_components(defined_elt, optional)
+      if defined_elt[-1] == "("
         optional += 1
-        a.sub!("(", "")
+        defined_elt.sub!("(", "")
         changed = true
       end
-      return a, optional, changed
+      return defined_elt, optional, changed
     end
 
-    def match_end_of_optional_components(a, optional)
-      if a[-1] == ")"
+    def match_end_of_optional_components(defined_elt, optional)
+      if defined_elt[-1] == ")"
         optional -= 1
-        a.sub!(")", "")
+        defined_elt.sub!(")", "")
         changed = true
       end
-      return a, optional, changed
+      return defined_elt, optional, changed
     end
 
     def match_optional_components(match, optional, index)
@@ -60,22 +60,22 @@ module Microframe
       return match, index, match
     end
 
-    def match_this(routes, path)
+    def match_this(defined, incoming)
       match = []; index = 0;
-      route = routes.split("/")
-      paths = path.split("/")
+      defined_route = defined.split("/")
+      incoming_route = incoming.split("/")
 
-      return false if route.size < paths.size
+      return false if defined_route.size < incoming_route.size
 
-      route.each do |a|
+      defined_route.each do |route_elt|
         pending_match = true; matched = false; optional = 0;
-        b = paths[index]
+        incoming_elt = incoming_route[index]
 
         while pending_match
-          matched = match_components(a, b)
+          matched = match_components(route_elt, incoming_elt)
           pending_match = false
-          a, optional, pending_match = match_begin_of_optional_components(a, optional) unless matched || pending_match
-          a, optional, pending_match = match_end_of_optional_components(a, optional) unless matched || pending_match
+          route_elt, optional, pending_match = match_begin_of_optional_components(route_elt, optional) unless matched || pending_match
+          route_elt, optional, pending_match = match_end_of_optional_components(route_elt, optional) unless matched || pending_match
           matched, index, pending_match = match_optional_components(matched, optional, index) unless matched || pending_match
         end
 

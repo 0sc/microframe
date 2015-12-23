@@ -3,15 +3,17 @@ require File.join(__dir__, "mapper")
 
 module Microframe
   class Router
-    attr_reader :route, :mapper, :object
+    attr_reader :routes, :mapper, :object
     attr_accessor :request
 
     def initialize
-      @route = Hash.new
+      @routes = Hash.new
     end
 
-    def handle_request(verb, path)
-      @mapper ||= Mapper.start(route)
+    def handle_request
+      verb = request.request_method
+      path = request.path_info
+      @mapper ||= Mapper.start(routes)
       handler = @mapper.map(verb, path) #get_handler(verb, path)
 
       return missing_path unless handler
@@ -37,8 +39,7 @@ module Microframe
 
     def self.setup_verbs(*verbs)
       verbs.each do |verb|
-        verb = verb.to_s
-        define_method(verb) { |path, handler| set_route(verb.upcase, path, handler) }
+        define_method(verb) { |path, handler| set_route(verb.to_s.upcase, path, handler) }
       end
     end
 
@@ -46,7 +47,7 @@ module Microframe
 
     def draw(&block)
       instance_eval(&block)
-      @route.default = {}
+      @routes.default = {}
     end
 
     def resources(name)
@@ -64,12 +65,12 @@ module Microframe
     private
 
     def get_handler(verb, path)
-      route[verb][path]
+      routes[verb][path]
     end
 
     def set_route(verb, path, handler = {})
-      @route[verb] ||= {}
-      @route[verb][path] = setup_handler(handler)
+      @routes[verb] ||= {}
+      @routes[verb][path] = setup_handler(handler)
     end
 
     def setup_handler(handler)

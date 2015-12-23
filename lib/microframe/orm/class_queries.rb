@@ -32,11 +32,11 @@ module Microframe
         end
 
         def define_attributes
+          save_data = []
           Connection.retrieve_columns(table_name).each do |column|
+            save_data << column
             define_method("#{column}=") do |val|
               instance_var = "@#{column}"
-              instance_variable_set("@save_queryset", {}) unless @save_queryset
-              @save_queryset[column] = val unless column == "id"
               instance_variable_set(instance_var, val)
             end
 
@@ -44,6 +44,10 @@ module Microframe
               instance_var = "@#{column}"
               instance_variable_get(instance_var)
             end
+          end
+
+          define_method("models_columns") do
+            save_data
           end
         end
 
@@ -64,7 +68,7 @@ module Microframe
         end
 
         def find(id)
-          find_by(id: id).fetch.first
+          find_by(id: id)
         end
 
         def find_by(options)
@@ -80,7 +84,7 @@ module Microframe
         end
 
         def count
-          all.fetch.size
+          all.size
         end
 
         def first
@@ -96,7 +100,7 @@ module Microframe
         end
 
         def order(val)
-          init_queryset(:limit, val)
+          init_queryset(:order, val)
         end
 
         def destroy(id)

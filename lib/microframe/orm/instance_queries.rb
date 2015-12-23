@@ -3,18 +3,17 @@ module Microframe
     module InstanceQueries
       include QueryUtils
       def save
-        @save_queryset["id"] = id
-        keys = save_queryset.keys.join(", ")
-        values = save_queryset.values
-        @save_queryset = nil
+        queryset = {}
+        models_columns.each { |col| queryset[col] = send(col) }
+        keys = queryset.keys.join(", ")
+        values = queryset.values
         placeholders = Array.new(values.size, "?").join(", ")
         result = Connection.connection.execute("REPLACE INTO #{table_name} (#{keys}) VALUES (#{placeholders})", values)
         result ? self.class.last : self
       end
 
       def update(options = {})
-        @save_queryset ||= {}
-        save_queryset.merge!(options)
+        options.each{ |col, val| send("#{col}=", val) }
         save
       end
 
@@ -22,10 +21,6 @@ module Microframe
         query = "DELETE FROM #{table_name} WHERE id =#{id}"
         execute(query)
         self
-      end
-
-      def save_queryset
-        @save_queryset
       end
     end
   end
