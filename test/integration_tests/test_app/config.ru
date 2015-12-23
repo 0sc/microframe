@@ -4,7 +4,7 @@ Bundler.require
 
 ChecklistApplication = Microframe::Application.new
 
-require File.join(__dir__, "config", "routes")
+require File.join(APP_PATH, "config", "routes")
 
 use Rack::Reloader
 use Rack::MethodOverride
