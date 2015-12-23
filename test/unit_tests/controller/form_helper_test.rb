@@ -23,12 +23,12 @@ class FormHelperTest < Minitest::Test
   end
 
   def test_label_without_start_of_form
-    assert_equal "<form action='link_to_sample' method='post'><label>Name</label>", @help.label("Name")
+    assert_equal "<form action='link_to_sample' method='post'><label >Name</label>", @help.label("Name")
   end
 
   def test_label_with_start_of_form
     @help.start_form
-    assert_equal "<label>Name</label>", @help.label("Name")
+    assert_equal "<label >Name</label>", @help.label("Name")
   end
 
   def test_text_area_without_start_of_form
@@ -59,12 +59,12 @@ class FormHelperTest < Minitest::Test
   end
 
   def test_checkbox_without_start_of_form
-    assert_equal "<form action='link_to_sample' method='post'><input type = 'checkbox' name = 'sample[id]' checked = '123' value = 'true'/>", @help.check_box("id")
+    assert_equal "<form action='link_to_sample' method='post'><input type = 'checkbox' name = 'sample[id]' checked = '123'  value = 'true'/>", @help.check_box("id")
   end
 
   def test_checkbox_with_start_of_form
     @help.start_form
-    assert_equal "<input type = 'checkbox' name = 'sample[id]' checked = 'something' value = 'true'/>", @help.check_box("id", "something")
+    assert_equal "<input type = 'checkbox' name = 'sample[id]' checked = '123' class = 'something' value = 'true'/>", @help.check_box("id", class: "something")
   end
 
   def test_hidden_field_without_start_of_form

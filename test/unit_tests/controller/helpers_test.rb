@@ -7,9 +7,9 @@ class HelpersTest < Minitest::Test
   end
 
   def test_link_to_with_delete_option
-    assert_equal @help.link_to("Destroy", "delete_link", method: :delete, data: { confirm: 'Are you sure?'}), "<form action='delete_link' method='post'><input type='hidden' name='_method' value='delete'/><input type='submit' value='Destroy' /></form>"
+    assert_equal @help.link_to("Destroy", "delete_link", method: :delete), "<form action='delete_link' method='post'><input type='hidden' name='_method' value='delete'/><input type='submit' value='Destroy' /></form>"
 
-    assert_equal @help.link_to("Destroy", Sample.new, method: :delete, data: { confirm: 'Are you sure?'}), "<form action='/samples/123' method='post'><input type='hidden' name='_method' value='delete'/><input type='submit' value='Destroy' /></form>"
+    assert_equal @help.link_to("Destroy", Sample.new, method: :delete), "<form action='/samples/123' method='post'><input type='hidden' name='_method' value='delete'/><input type='submit' value='Destroy' /></form>"
   end
 
   def test_link_to_without_delete_option
@@ -19,7 +19,7 @@ class HelpersTest < Minitest::Test
   end
 
   def test_form_for
-    assert_equal @help.form_for(Sample.new, "link_to_sample") { |f| f.label :Name}, "<form action='link_to_sample' method='post'><label>Name</label>"
+    assert_equal @help.form_for(Sample.new, "link_to_sample") { |f| f.label :Name}, "<form action='link_to_sample' method='post'><label >Name</label>"
 
     assert_equal @help.form_for(Sample.new, "link_to_sample") { |f| f.text_field :id}, "<form action='link_to_sample' method='post'><input type = 'text' name = 'sample[id]' value = '123' />"
   end

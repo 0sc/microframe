@@ -3,12 +3,12 @@ require File.join(__dir__, "form_helper")
 module Microframe
   module Helpers
     def link_to(link, target, options = {})
+      xtras = []
       if options[:method]
         target = target.is_a?(String) ? target : "/#{target.class.to_s.downcase}s/#{target.id}"
-
-        "<form action='#{target}' method='post'><input type='hidden' name='_method' value='#{options[:method]}'/><input type='submit' value='#{link}' /></form>"
+        options.each { |key, val| xtras << "#{key}='#{val}'" unless key == :method }
+        "<form action='#{target}' method='post'><input type='hidden' name='_method' value='#{options[:method]}'/><input type='submit' value='#{link}' #{xtras.join(" ")}/></form>"
       else
-        xtras = []
         options.each { |key, val| xtras << "#{key}='#{val}'"}
         "<a href='#{target}' #{xtras.join(" ")} >#{link}</a>"
       end
@@ -21,7 +21,7 @@ module Microframe
     # def image_tag(image, ext = "png")
     #   File.join(APP_PATH, "app", "assets", "images", "#{image}.#{ext}")
     # end
-    # 
+    #
     # def javascript_tag(js)
     #   File.join(APP_PATH, "app", "assets", "javascripts", "#{js}.js")
     # end
