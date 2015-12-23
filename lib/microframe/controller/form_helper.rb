@@ -16,8 +16,8 @@ module Microframe
       "<form action='#{@link}' method='post'>"
     end
 
-    def label(name)
-      gatekeeper "<label>#{name}</label>"
+    def label(name, options = {})
+      gatekeeper "<label #{parse_options(options)}>#{name}</label>"
     end
 
     def text_area(name, options = {})
@@ -36,9 +36,9 @@ module Microframe
       gatekeeper output
     end
 
-    def check_box(name, val=nil)
-      val ||= target.send(name)
-      gatekeeper "<input type = 'checkbox' name = '#{target_name}[#{name}]' checked = '#{val}' value = 'true'/>"
+    def check_box(name, options = {})
+      val = target.send(name)
+      gatekeeper "<input type = 'checkbox' name = '#{target_name}[#{name}]' checked = '#{val}' #{parse_options(options)} value = 'true'/>"
     end
 
     def hidden(val)
@@ -53,7 +53,7 @@ module Microframe
 
     def parse_options(options)
       xtras = []
-      options.each { |key, val| xtras << "#{key}='#{val}'"}
+      options.each { |key, val| xtras << "#{key} = '#{val}'"}
       xtras.join(" ")
     end
   end
