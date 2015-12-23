@@ -32,21 +32,21 @@ class FormHelperTest < Minitest::Test
   end
 
   def test_text_area_without_start_of_form
-    assert_equal "<form action='link_to_sample' method='post'><textarea name = 'sample[id]'>123</textarea>", @help.text_area("id")
+    assert_equal "<form action='link_to_sample' method='post'><textarea name = 'sample[id]' >123</textarea>", @help.text_area("id")
   end
 
   def test_text_area_with_start_of_form
     @help.start_form
-    assert_equal "<textarea name = 'sample[id]'>123</textarea>", @help.text_area("id")
+    assert_equal "<textarea name = 'sample[id]' >123</textarea>", @help.text_area("id")
   end
 
   def test_text_field_without_start_of_form
-    assert_equal "<form action='link_to_sample' method='post'><input type = 'text' name = 'sample[id]' value = '123'/>", @help.text_field("id")
+    assert_equal "<form action='link_to_sample' method='post'><input type = 'text' name = 'sample[id]' value = '123' />", @help.text_field("id")
   end
 
   def test_field_with_start_of_form
     @help.start_form
-    assert_equal "<input type = 'text' name = 'sample[id]' value = '123'/>", @help.text_field("id")
+    assert_equal "<input type = 'text' name = 'sample[id]' value = '123' />", @help.text_field("id")
   end
 
   def test_submit_without_start_of_form

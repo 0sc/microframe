@@ -20,18 +20,18 @@ module Microframe
       gatekeeper "<label>#{name}</label>"
     end
 
-    def text_area(name)
-      gatekeeper "<textarea name = '#{target_name}[#{name}]'>#{target.send(name)}</textarea>"
+    def text_area(name, options = {})
+      gatekeeper "<textarea name = '#{target_name}[#{name}]' #{parse_options(options)}>#{target.send(name)}</textarea>"
     end
 
-    def text_field(name)
-      gatekeeper "<input type = 'text' name = '#{target_name}[#{name}]' value = '#{target.send(name)}'/>"
+    def text_field(name, options = {})
+      gatekeeper "<input type = 'text' name = '#{target_name}[#{name}]' value = '#{target.send(name)}' #{parse_options(options)}/>"
     end
 
-    def submit
+    def submit(options = {})
       output = ""
       output += "<input type = 'hidden' name = '_method' value = 'put'/>" if target_id
-      output += "<input type = 'submit' value = 'save' />"
+      output += "<input type = 'submit' value = 'save' #{parse_options(options)}/>"
       output += "</form>"
       gatekeeper output
     end
@@ -49,6 +49,12 @@ module Microframe
 
     def gatekeeper(output)
       form_started ? output : start_form + output
+    end
+
+    def parse_options(options)
+      xtras = []
+      options.each { |key, val| xtras << "#{key}='#{val}'"}
+      xtras.join(" ")
     end
   end
 end
