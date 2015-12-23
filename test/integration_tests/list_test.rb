@@ -1,4 +1,4 @@
-require_relative "../base"
+require_relative "base"
 
 class CreateListTest < CapybaraTestCase
   # i_suck_and_my_tests_are_order_dependent!
@@ -18,6 +18,9 @@ class CreateListTest < CapybaraTestCase
     visit "/"
     click_link(@@name)
     assert page.has_content? "Name: #{@@name}"
+
+    visit "/lists/invalid_id"
+    assert_equal page.current_path, "/lists"
   end
 
   def test_destroy_list

@@ -1,12 +1,9 @@
 require "test_helper"
-
-class Sample
-  def id; 123; end;
-end
+require "mock_objects"
 
 class HelpersTest < Minitest::Test
   def setup
-    @help = Microframe::ApplicationController.new(Request, "controller", "action")
+    @help = Microframe::ApplicationController.new(Sample, "controller", "action")
   end
 
   def test_link_to_with_delete_option

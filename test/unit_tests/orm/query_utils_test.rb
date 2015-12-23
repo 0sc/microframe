@@ -1,8 +1,6 @@
 require "test_helper"
 require "base"
-
-class Sample < Microframe::ORM::Base
-end
+require "mock_objects"
 
 class QueryUtilsTest < Minitest::Test
   def setup

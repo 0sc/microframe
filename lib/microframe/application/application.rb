@@ -10,10 +10,8 @@ module Microframe
 
     def call(env)
       @request = Rack::Request.new(env)
-      verb = request.request_method
-      path = request.path_info
       routes.request = request
-      routes.handle_request(verb, path)
+      routes.handle_request
     end
   end
 end

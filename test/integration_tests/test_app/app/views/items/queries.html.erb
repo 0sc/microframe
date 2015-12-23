@@ -1,0 +1,25 @@
+
+<p>
+  This list has <%= List.first.items.all.count %> items
+</p>
+<p>
+  The name of the list this item belongs to is <%= @item.first.list.name %>
+</p>
+<!-- has_many: has  -->
+
+
+<h2>Some queries</h2>
+<ul>
+  <li>Total lists: <%= List.count %></li>
+  <li>Done status of first item: <%= Item.select("done").fetch.first.done %></li>
+  <li>Order items by id: <%= Item.order("id DESC").fetch.first.id %></li>
+  <li>Change item attribute
+    <ul>
+      <li>To change done, @item.done = false. Then save</li>
+      <% item = @item.first; item.done = "false"; item.save; %>
+      <li></li>
+    </ul>
+</li>
+<li>And viola its changed Done status of first item: <%= Item.last.done %></li>
+<li>@item.destroy: this destroys the item <% @item.first.destroy %></li>
+</ul>

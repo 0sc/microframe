@@ -12,11 +12,10 @@ module Microframe
       end
 
       def belongs_to(model, options = {})
-        model = model.to_s
         define_method(model) do
           options[:foreign_key] ||= "id"
-          model_id = send((model + "_id").to_sym)
-          Module.const_get(model.capitalize).where(options[:foreign_key] => model_id )
+          model_id = send("#{model}_id")
+          Module.const_get(model.to_s.capitalize).where(options[:foreign_key] => model_id ).fetch.first
         end
       end
 
