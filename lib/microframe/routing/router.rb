@@ -4,7 +4,7 @@ require File.join(__dir__, "mapper")
 module Microframe
   class Router
     attr_reader :routes, :mapper, :object
-    attr_accessor :request
+    attr_accessor :request, :response
 
     def initialize
       @routes = Hash.new
@@ -32,7 +32,7 @@ module Microframe
       action = handler[:action]
       get_handler_file(controller)
 
-      @object = Module.const_get(controller.capitalize + "Controller").new(request, controller, action)
+      @object = Module.const_get(controller.capitalize + "Controller").new(request, controller, action, response)
       object.send(action.to_sym)
     end
 
@@ -83,7 +83,9 @@ module Microframe
     end
 
     def missing_path
-      [404, {"Content-Type" => "application/html"}, ["<p>We are here but unfortunately, this page: #{request.host}#{request.path_info} isn't. Return home while we keep looking for it.</p>"]]
+      response.status = 404
+      response.write("<p>We are here but unfortunately, this page: #{request.host}#{request.path_info} isn't. Return home while we keep looking for it.</p>")
+      response
     end
   end
 end

@@ -21,18 +21,18 @@ module Microframe
     def image_tag(image, options={})
       xtras = []
       options.each {|key, val| xtras << "#{key} = '#{val}'"}
-      img = File.join("images", "#{image}")
-      "<img src = '#{img}' #{xtras.join(' ')}/>"
+      img = File.join("images", image)
+      "<img src = '/#{img}' #{xtras.join(' ')}/>"
     end
 
     def javascript_tag(js)
-      script = File.join("javascripts", "#{js}.js")
-      "<script type = 'text/javascript' src = '#{script}'></script>"
+      script = File.join("javascripts", js)
+      "<script type = 'text/javascript' src = '/#{script}'></script>"
     end
 
     def stylesheet_tag(style)
-      stylesheet = File.join("stylesheets", "#{style}")
-      "<link type = 'text/css' rel = 'stylesheet' href = '#{stylesheet}'>"
+      stylesheet = File.join("stylesheets", style)
+      "<link type = 'text/css' rel = 'stylesheet' href = '/#{stylesheet}'>"
     end
   end
 end

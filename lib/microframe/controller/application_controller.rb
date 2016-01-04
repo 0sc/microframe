@@ -4,13 +4,14 @@ require File.join(__dir__, "view_object")
 module Microframe
    class ApplicationController
      include Helpers
-     attr_reader :request, :params, :view_rendered, :errors, :child, :action, :view_vars
+     attr_reader :request, :params, :view_rendered, :errors, :child, :action, :view_vars, :response
 
-     def initialize(request, child, action)
+     def initialize(request, child, action, response)
        @request = request
        @child = child
        @action = action
        @params = request.params
+       @response = response
      end
 
      def default_render_option
@@ -19,7 +20,8 @@ module Microframe
 
      def redirect_to(location)
        @view_rendered = true
-       [302, {"Location" => location}, []]
+       response.redirect(location)
+       response
      end
 
      def render(options = {})
@@ -27,19 +29,20 @@ module Microframe
       view = get_view(options[:view])
       layout = get_layout(options[:layout])
       obj = set_up_view_object
-      status = 200
+      response.status = 200
 
       if(render_error?(view, layout))
-        response = Tilt.new(File.join(APP_PATH, "public", "404.html.erb"))
-        status = 404
-        response = response.render(obj, errors: @errors)
+        tilt = Tilt.new(File.join(APP_PATH, "public", "404.html.erb"))
+        view = tilt.render(obj, errors: @errors)
+        response.status = 404
+        response.write(view)
       else
         template = Tilt::ERBTemplate.new(layout)
-        view = Tilt::ERBTemplate.new(view)
-        response = template.render(obj){ view.render(obj)}
+        tilt = Tilt::ERBTemplate.new(view)
+        view = template.render(obj){ tilt.render(obj)}
+        response.write(view)
       end
-
-      [status, {}, [response]]
+      response
      end
 
      def render_view
