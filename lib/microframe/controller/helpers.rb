@@ -10,7 +10,7 @@ module Microframe
         "<form action='#{target}' method='post'><input type='hidden' name='_method' value='#{options[:method]}'/><input type='submit' value='#{link}' #{xtras.join(" ")}/></form>"
       else
         options.each { |key, val| xtras << "#{key}='#{val}'"}
-        "<a href='#{target}' #{xtras.join(" ")} >#{link}</a>"
+        "<a href = '#{target}' #{xtras.join(" ")} >#{link}</a>"
       end
     end
 
@@ -18,16 +18,21 @@ module Microframe
       yield(FormHelper.new(target, link))
     end
 
-    # def image_tag(image, ext = "png")
-    #   File.join(APP_PATH, "app", "assets", "images", "#{image}.#{ext}")
-    # end
-    #
-    # def javascript_tag(js)
-    #   File.join(APP_PATH, "app", "assets", "javascripts", "#{js}.js")
-    # end
-    #
-    # def stylesheet_tag(style, ext = "css")
-    #   "href = '#{File.join("app", "assets", "stylesheets", "#{style}.#{ext}")}'"
-    # end
+    def image_tag(image, options={})
+      xtras = []
+      options.each {|key, val| xtras << "#{key} = '#{val}'"}
+      img = File.join("images", "#{image}")
+      "<img src = '#{img}' #{xtras.join(' ')}/>"
+    end
+
+    def javascript_tag(js)
+      script = File.join("javascripts", "#{js}.js")
+      "<script type = 'text/javascript' src = '#{script}'></script>"
+    end
+
+    def stylesheet_tag(style)
+      stylesheet = File.join("stylesheets", "#{style}")
+      "<link type = 'text/css' rel = 'stylesheet' href = '#{stylesheet}'>"
+    end
   end
 end

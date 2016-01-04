@@ -13,9 +13,9 @@ class HelpersTest < Minitest::Test
   end
 
   def test_link_to_without_delete_option
-    assert_equal @help.link_to("root", "root_link"), "<a href='root_link'  >root</a>"
+    assert_equal @help.link_to("root", "root_link"), "<a href = 'root_link'  >root</a>"
 
-    assert_equal @help.link_to("root", "root_link", "data-confirm" => "Are you sure"), "<a href='root_link' data-confirm='Are you sure' >root</a>"
+    assert_equal @help.link_to("root", "root_link", "data-confirm" => "Are you sure"), "<a href = 'root_link' data-confirm='Are you sure' >root</a>"
   end
 
   def test_form_for
