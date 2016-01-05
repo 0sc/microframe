@@ -1,10 +1,13 @@
 require File.join(__dir__, "helpers")
 require File.join(__dir__, "view_object")
+require File.join(__dir__, "session")
 
 module Microframe
    class ApplicationController
      include Helpers
+     include Session
      attr_reader :request, :params, :view_rendered, :errors, :child, :action, :view_vars, :response
+     attr_accessor :session
 
      def initialize(request, child, action, response)
        @request = request
@@ -12,6 +15,7 @@ module Microframe
        @action = action
        @params = request.params
        @response = response
+       @session = request.cookies
      end
 
      def default_render_option
@@ -21,6 +25,7 @@ module Microframe
      def redirect_to(location)
        @view_rendered = true
        response.redirect(location)
+       cleanup!
        response
      end
 
@@ -42,6 +47,7 @@ module Microframe
         view = template.render(obj){ tilt.render(obj)}
         response.write(view)
       end
+      cleanup!
       response
      end
 
@@ -95,6 +101,13 @@ module Microframe
          inst_vars.each{|key, value| instance_variable_set("@#{key}", value) }
        end
        obj
+     end
+
+     def cleanup!
+       save_session
+       save_flash
+       save_notice
+       save_alert
      end
    end
 end
