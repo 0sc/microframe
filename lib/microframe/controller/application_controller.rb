@@ -92,7 +92,7 @@ module Microframe
      end
 
      def protected_instance_variables_for_views
-       [:@request, :@action, :@view_rendered, :@child]
+       [:@request, :@action, :@view_rendered, :@child, :@response, :@session]
      end
 
      def set_up_view_object

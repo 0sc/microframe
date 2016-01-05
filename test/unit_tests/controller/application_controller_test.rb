@@ -3,7 +3,7 @@ require "application_controller"
 
 class ApplicationControllerTest < Minitest::Test
   def setup
-    @app = Microframe::ApplicationController.new(Sample, "controller", "action")
+    @app = Microframe::ApplicationController.new(Sample.new, "controller", "action", Sample.new)
   end
 
   def test_default_rendered_view_option
@@ -11,7 +11,7 @@ class ApplicationControllerTest < Minitest::Test
   end
 
   def test_redirect_to
-    assert_equal [302, {"Location" => "target"}, []], @app.redirect_to("target")
+    assert_instance_of Sample, @app.redirect_to("target")
   end
 
   def test_render_view
@@ -55,10 +55,9 @@ class ApplicationControllerTest < Minitest::Test
 
   def test_set_instance_variables_for_views_avoids_protect_vars
     @app.instance_eval { @an_instance_var = "something" }
-    @app.stub(:protected_instance_variables_for_views, [:@an_instance_var]) do
-      refute_empty @app.set_instance_variables_for_views
-      assert_equal @app.set_instance_variables_for_views, "request" => Sample, "child" => "controller", "action" => "action", "params" => nil
-    end
+    refute_empty @app.set_instance_variables_for_views
+    assert_equal @app.set_instance_variables_for_views, "params" => nil, "an_instance_var" => "something"
+    refute_includes @app.set_instance_variables_for_views, "session" => {}, "requests" => Sample.new, "response" => Sample.new
   end
 
   def test_view_object
