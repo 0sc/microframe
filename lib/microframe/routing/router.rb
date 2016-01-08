@@ -50,6 +50,10 @@ module Microframe
       @routes.default = {}
     end
 
+    def root(path)
+      get("/", to: path)
+    end
+
     def resources(name)
       name = name.to_s
       get("/#{name}", to: "#{name}#index")

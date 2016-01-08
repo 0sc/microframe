@@ -33,9 +33,19 @@ module Microframe
       end
     end
 
+    desc "server", "starts the Microframe server"
+    def server
+      run "rackup"
+    end
+
     desc "g TYPE NAME OPTIONS", "alias for microframe generate"
     def g(type, name, *xtras)
       invoke :generate, [type, name, *xtras]
+    end
+
+    desc "s", "alias for Microframe server"
+    def s
+      invoke :server
     end
 
     private

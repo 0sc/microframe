@@ -40,6 +40,12 @@ This will generate the correct files and folder structure required for a `microf
 
 Checkout [Sample checklist app](https://github.com/andela-ooranagwa/checklist_with_microframe) built entirely with **Microframe**.
 
+> Having bug issues?
+1. Check the sample app
+2. If not sampled: try it the Rails ways
+3. If not solved: check the list of outstanding features
+4. If not included, raise a github issues
+
 ## Features
 ### ORM
 Microframe comes with a nice little **ORM** that closely mimicks **Active Record**. Currently, the **ORM** utilizes `sqlite3` gem to implement support for the `sqlite` `db`.
@@ -204,6 +210,10 @@ Sample usage
 ```ruby
   $ microframe generate view [controller_name] view1 view2 #=> creates a folder for the given controller in the view directory with the given view files
 ```
+```ruby
+  $ microframe server #=> Starts there rackup server. It can be called with optionals arguments to rackup
+  $ microframe s
+```
 
 ## Development
 
@@ -223,6 +233,7 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/andela
 * Implement `before action` for controllers
 * Improve `route` matchers
 * Implement `generating scaffold`
+* Improve `microframe server` to accept `rackup arguments`
 * Improve **ORM** security
 * Implement modifying tables
 * Implement support for more db types
