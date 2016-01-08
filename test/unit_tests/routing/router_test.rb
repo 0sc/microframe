@@ -7,6 +7,7 @@ class RouterTest < Minitest::Test
   def setup
     @router = Microframe::Router.new
     @router.request = Sample.new
+    @router.response = Sample.new
   end
 
   def test_initializes_empty_route_hash
@@ -99,7 +100,6 @@ class RouterTest < Minitest::Test
   end
 
   def test_mission_path_returns_404
-    assert_kind_of Array, @router.send(:missing_path)
-    assert_includes @router.send(:missing_path), 404
+    assert_kind_of Sample, @router.send(:missing_path)
   end
 end

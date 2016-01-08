@@ -1,16 +1,21 @@
 require File.join(__dir__, "helpers")
 require File.join(__dir__, "view_object")
+require File.join(__dir__, "session")
 
 module Microframe
    class ApplicationController
      include Helpers
-     attr_reader :request, :params, :view_rendered, :errors, :child, :action, :view_vars
+     include Session
+     attr_reader :request, :params, :view_rendered, :errors, :child, :action, :view_vars, :response
+     attr_accessor :session
 
-     def initialize(request, child, action)
+     def initialize(request, child, action, response)
        @request = request
        @child = child
        @action = action
        @params = request.params
+       @response = response
+       @session = request.cookies
      end
 
      def default_render_option
@@ -19,7 +24,9 @@ module Microframe
 
      def redirect_to(location)
        @view_rendered = true
-       [302, {"Location" => location}, []]
+       response.redirect(location)
+       cleanup!
+       response
      end
 
      def render(options = {})
@@ -27,19 +34,21 @@ module Microframe
       view = get_view(options[:view])
       layout = get_layout(options[:layout])
       obj = set_up_view_object
-      status = 200
+      response.status = 200
 
       if(render_error?(view, layout))
-        response = Tilt.new(File.join(APP_PATH, "public", "404.html.erb"))
-        status = 404
-        response = response.render(obj, errors: @errors)
+        tilt = Tilt.new(File.join(APP_PATH, "public", "404.html.erb"))
+        view = tilt.render(obj, errors: @errors)
+        response.status = 404
+        response.write(view)
       else
         template = Tilt::ERBTemplate.new(layout)
-        view = Tilt::ERBTemplate.new(view)
-        response = template.render(obj){ view.render(obj)}
+        tilt = Tilt::ERBTemplate.new(view)
+        view = template.render(obj){ tilt.render(obj)}
+        response.write(view)
       end
-
-      [status, {}, [response]]
+      cleanup!
+      response
      end
 
      def render_view
@@ -83,7 +92,7 @@ module Microframe
      end
 
      def protected_instance_variables_for_views
-       [:@request, :@action, :@view_rendered, :@child]
+       [:@request, :@action, :@view_rendered, :@child, :@response, :@session]
      end
 
      def set_up_view_object
@@ -92,6 +101,13 @@ module Microframe
          inst_vars.each{|key, value| instance_variable_set("@#{key}", value) }
        end
        obj
+     end
+
+     def cleanup!
+       save_session
+       save_flash
+       save_notice
+       save_alert
      end
    end
 end

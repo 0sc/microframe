@@ -10,8 +10,11 @@ module Microframe
 
     def call(env)
       @request = Rack::Request.new(env)
+      response = Rack::Response.new
       routes.request = request
-      routes.handle_request
+      routes.response = response
+      response = routes.handle_request
+      response.finish
     end
   end
 end

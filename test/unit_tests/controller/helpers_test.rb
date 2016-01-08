@@ -3,7 +3,7 @@ require "mock_objects"
 
 class HelpersTest < Minitest::Test
   def setup
-    @help = Microframe::ApplicationController.new(Sample, "controller", "action")
+    @help = Microframe::ApplicationController.new(Sample.new, "controller", "action", Sample.new)
   end
 
   def test_link_to_with_delete_option
@@ -13,9 +13,9 @@ class HelpersTest < Minitest::Test
   end
 
   def test_link_to_without_delete_option
-    assert_equal @help.link_to("root", "root_link"), "<a href='root_link'  >root</a>"
+    assert_equal @help.link_to("root", "root_link"), "<a href = 'root_link'  >root</a>"
 
-    assert_equal @help.link_to("root", "root_link", "data-confirm" => "Are you sure"), "<a href='root_link' data-confirm='Are you sure' >root</a>"
+    assert_equal @help.link_to("root", "root_link", "data-confirm" => "Are you sure"), "<a href = 'root_link' data-confirm='Are you sure' >root</a>"
   end
 
   def test_form_for
