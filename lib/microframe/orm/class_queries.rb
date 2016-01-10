@@ -1,10 +1,12 @@
 require File.join(__dir__,"queryset")
 require File.join(__dir__,"relationships")
+require File.join(__dir__,"validation")
 
 module Microframe
   module ORM
     class Base
       @@create_table_query = []
+      @@validation = {}
       class << self
         include Relationships
 
@@ -16,15 +18,33 @@ module Microframe
           options[:type] = options[:type].to_s.upcase
           options[:nullable] = options[:nullable] ? "NULL" : "NOT NULL"
           options[:primary_key] = options[:primary_key] ? "PRIMARY KEY AUTOINCREMENT" : ""
-          @@create_table_query << (col_name.to_s + " " + options.values.join(" "))
+          get_create_table_query << (col_name.to_s + " " + options.values.join(" "))
         end
+
+        def validates(col, options={})
+          validators(table_name).add(col, options)
+        end
+
+        def validate_with(mtd)
+          validators(table_name).add_custom(mtd)
+        end
+
+        def validators(table)
+          @@validation[table] = Validation.new(table_name) unless @@validation[table]
+          @@validation[table]
+        end
+
+        def all_validators
+          @@validation
+        end
+
 
         def get_create_table_query
           @@create_table_query
         end
 
         def create_table
-          query = "CREATE TABLE IF NOT EXISTS #{table_name} (#{@@create_table_query.join(", ")})"
+          query = "CREATE TABLE IF NOT EXISTS #{table_name} (#{get_create_table_query.join(", ")})"
           if Connection.execute(query)
             @@create_table_query = []
             define_attributes
@@ -52,11 +72,7 @@ module Microframe
         end
 
         def create(options={})
-          keys = options.keys.join(", ")
-          values = options.values
-          placeholders = Array.new(values.size, "?").join(", ")
-          Connection.connect.execute("INSERT INTO #{table_name} (#{keys}) VALUES (#{placeholders})", values)
-          self.last
+          new(options).save
         end
 
         def table_name
