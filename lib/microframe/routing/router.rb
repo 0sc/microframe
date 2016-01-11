@@ -1,4 +1,4 @@
-require File.join(__dir__, "../","controller", "application_controller")
+require File.join(__dir__, "../", "controller", "application_controller")
 require File.join(__dir__, "mapper")
 
 module Microframe
@@ -14,7 +14,7 @@ module Microframe
       verb = request.request_method
       path = request.path_info
       @mapper ||= Mapper.start(routes)
-      handler = @mapper.map(verb, path) #get_handler(verb, path)
+      handler = @mapper.map(verb, path) # get_handler(verb, path)
 
       return missing_path unless handler
 
@@ -32,14 +32,16 @@ module Microframe
       action = handler[:action]
       get_handler_file(controller)
 
-      @object = Module.const_get(controller.capitalize + "Controller").new(request, controller, action, response)
+      @object = Module.const_get(controller.capitalize + "Controller").
+                new(request, controller, action, response)
       object.send(action.to_sym)
     end
 
-
     def self.setup_verbs(*verbs)
       verbs.each do |verb|
-        define_method(verb) { |path, handler| set_route(verb.to_s.upcase, path, handler) }
+        define_method(verb) do |path, handler|
+          set_route(verb.to_s.upcase, path, handler)
+        end
       end
     end
 
@@ -48,6 +50,10 @@ module Microframe
     def draw(&block)
       instance_eval(&block)
       @routes.default = {}
+    end
+
+    def root(path)
+      get("/", to: path)
     end
 
     def resources(name)
@@ -75,16 +81,22 @@ module Microframe
 
     def setup_handler(handler)
       controller, action = handler[:to].split("#")
-      {controller: controller, action: action}
+      { controller: controller, action: action }
     end
 
     def get_handler_file(controller)
-      require File.join(APP_PATH, "app", "controllers",  controller + "_controller")
+      require File.join(
+        APP_PATH, "app", "controllers", controller + "_controller"
+      )
     end
 
     def missing_path
       response.status = 404
-      response.write("<p>We are here but unfortunately, this page: #{request.host}#{request.path_info} isn't. Return home while we keep looking for it.</p>")
+      response.write(
+        "<p>We are here but unfortunately, this page: "\
+        "#{request.host}#{request.path_info} isn't. "\
+        "Return home while we keep looking for it.</p>"
+      )
       response
     end
   end

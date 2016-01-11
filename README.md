@@ -40,6 +40,12 @@ This will generate the correct files and folder structure required for a `microf
 
 Checkout [Sample checklist app](https://github.com/andela-ooranagwa/checklist_with_microframe) built entirely with **Microframe**.
 
+> Having bug issues?
+1. Check the sample app
+2. If not sampled: try it the Rails ways
+3. If not solved: check the list of outstanding features
+4. If not included, [raise github issue](https://github.com/andela-ooranagwa/microframe/issues/new)
+
 ## Features
 ### ORM
 Microframe comes with a nice little **ORM** that closely mimicks **Active Record**. Currently, the **ORM** utilizes `sqlite3` gem to implement support for the `sqlite` `db`.
@@ -151,6 +157,72 @@ User.name = "New name"
 User.email = "new_email@email.com"
 User.save
  ```
+#### Validations
+Rails style validations is also available for models in Microframe. Validations get executed before a `save` or an `update` is performed. _Note that the 'save' is implicitly called for 'create'_. When a validation fails, the requested operation returns `false`. The errors inhibiting the operation can be accessed by calling the `errors` method on the object.
+
+Example
+```ruby
+validates :name,  presence: true,
+validates :name, length: { maximum: 50 },
+validates :name, uniqueness: true
+```
+
+You can also have multiple conditions in one line:
+```ruby
+validates :name,  presence: true, length: { maximum: 50 }, uniqueness: true
+```
+
+
+The following are valid conditions
+* presence
+* absence
+* length
+* inclusion
+* exclusion
+* numericality
+* uniqueness
+* with
+
+Sample
+```ruby
+validates :username, exclusion: { in: %w(admin superuser) }
+validates :age, inclusion: { in: 0..9 }
+validates :age, inclusion: { within: 10..900 }
+validates :first_name, length: { maximum: 30 }
+validates :first_name, length: { minimum: 30 }
+validates :first_name, length: { in: 30..35 }
+validates :first_name, length: { is: 30 }
+validates :age, numericality: { only_integer: true }
+validates :age, numericality: { greater_than: true }
+validates :age, numericality: { greater_than_or_equal_to: true }
+validates :age, numericality: { less_than: true }
+validates :age, numericality: { less_than_or_equal_to: true }
+validates :username, presence: true
+validates :username, absence: false
+validates :username, uniqueness: true
+```
+
+You can also validate with custom validators you define in the model by passing the name of the validator as value to `with` in the `validates` option:
+
+```ruby
+validates :name, with: :custom_name_validator
+
+def custom_name_validator
+  #some validation codes
+  #use error.add(err_message) to add an error message for failed validation
+end
+```
+
+You can also use the `validate_with` keyword to define a custom validator. The `validate_with` accepts only **one** argument which is the method to be called during validation process
+
+```ruby
+  validate_with :my_validator
+```
+
+To add `error` messages in a `custom validator`, use the `add` method on the error property of the object;
+```ruby
+  error.add("error message")
+```
 
 #### Relationships
 Microframe supports `has_many` and `belongs_to` relation found in `AR`. And yes, they have similar behaviour.
@@ -204,6 +276,10 @@ Sample usage
 ```ruby
   $ microframe generate view [controller_name] view1 view2 #=> creates a folder for the given controller in the view directory with the given view files
 ```
+```ruby
+  $ microframe server #=> Starts there rackup server. It can be called with optionals arguments to rackup
+  $ microframe s
+```
 
 ## Development
 
@@ -223,6 +299,7 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/andela
 * Implement `before action` for controllers
 * Improve `route` matchers
 * Implement `generating scaffold`
+* Improve `microframe server` to accept `rackup arguments`
 * Improve **ORM** security
 * Implement modifying tables
 * Implement support for more db types

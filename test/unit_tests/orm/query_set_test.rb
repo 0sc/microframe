@@ -29,7 +29,8 @@ class QuerysetTest < Minitest::Test
     assert_equal @util.find_by(name: "myname"), @util
     assert_equal @util.queryset["WHERE"], ["name = 'myname'"]
     assert_equal @util.find_by(email: "email@email.com"), @util
-    assert_equal @util.queryset["WHERE"], ["name = 'myname'", "email = 'email@email.com'"]
+    assert_equal @util.queryset["WHERE"],
+                 ["name = 'myname'", "email = 'email@email.com'"]
   end
 
   def test_find_method
@@ -65,9 +66,12 @@ class QuerysetTest < Minitest::Test
     assert_equal @util.add_query("SELECT", "name"), @util
     assert_equal @util.queryset, "WHERE" => ["id = '12'"], "SELECT" => ["name"]
     assert_equal @util.add_query("WHERE", "name = 'name'"), @util
-    assert_equal @util.queryset, "WHERE" => ["id = '12'", "name = 'name'"], "SELECT" => ["name"]
+    assert_equal @util.queryset,
+                 "WHERE" => ["id = '12'", "name = 'name'"], "SELECT" => ["name"]
     assert_equal @util.add_query("SELECT", "id"), @util
-    assert_equal @util.queryset, "WHERE" => ["id = '12'", "name = 'name'"], "SELECT" => ["name", "id"]
+    assert_equal @util.queryset,
+                 "WHERE" => ["id = '12'", "name = 'name'"],
+                 "SELECT" => %w(name id)
   end
 
   def test_fetch_query
@@ -79,7 +83,7 @@ class QuerysetTest < Minitest::Test
   end
 
   def test_load
-    @util.stub(:fetch, ["a", "b"]) do
+    @util.stub(:fetch, %w(a b)) do
       assert_equal @util.load, "a"
     end
   end

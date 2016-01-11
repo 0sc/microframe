@@ -1,6 +1,6 @@
 class ItemsController < Microframe::ApplicationController
   def index
-    redirect_to ("/lists/#{params[:list_id]}")
+    redirect_to("/lists/#{params[:list_id]}")
   end
 
   def show
@@ -19,19 +19,19 @@ class ItemsController < Microframe::ApplicationController
   def create
     set_list
     @item = Item.create(item_params)
-    redirect_to ("/lists/#{@list.id}/items/#{@item.id}")
+    redirect_to("/lists/#{@list.id}/items/#{@item.id}")
   end
 
   def update
     set_item
     @item.update(item_params)
-    redirect_to ("/lists/#{@list.id}/items/#{@item.id}")
+    redirect_to("/lists/#{@list.id}/items/#{@item.id}")
   end
 
   def destroy
     set_item
     Item.destroy(@item.id)
-    redirect_to ("/lists/#{params[:list_id]}")
+    redirect_to("/lists/#{params[:list_id]}")
   end
 
   def queries
@@ -59,5 +59,4 @@ class ItemsController < Microframe::ApplicationController
     params["item"].merge!("done" => "false") unless params["item"]["done"]
     params["item"]
   end
-
 end

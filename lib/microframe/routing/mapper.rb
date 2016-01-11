@@ -3,7 +3,7 @@ module Microframe
     attr_reader :routes, :placeholders
     def initialize(routes)
       @routes = routes
-      @placeholders = {};
+      @placeholders = {}
     end
 
     def self.start(route)
@@ -27,11 +27,14 @@ module Microframe
       found = false
       if defined_elt == incoming_elt
         found = true
-      elsif defined_elt[0] == ":" && defined_elt[-1] != ")" && defined_elt[-1] != "(" && !incoming_elt.nil?
+      elsif defined_elt[0] == ":" &&
+            defined_elt[-1] != ")" &&
+            defined_elt[-1] != "(" &&
+            !incoming_elt.nil?
         @placeholders[defined_elt[1..-1].to_sym] = incoming_elt
         found = true
       end
-      return found
+      found
     end
 
     def match_begin_of_optional_components(defined_elt, optional)
@@ -40,7 +43,7 @@ module Microframe
         defined_elt.sub!("(", "")
         changed = true
       end
-      return defined_elt, optional, changed
+      [defined_elt, optional, changed]
     end
 
     def match_end_of_optional_components(defined_elt, optional)
@@ -49,7 +52,7 @@ module Microframe
         defined_elt.sub!(")", "")
         changed = true
       end
-      return defined_elt, optional, changed
+      [defined_elt, optional, changed]
     end
 
     def match_optional_components(match, optional, index)
@@ -57,26 +60,39 @@ module Microframe
         match = true
         index -= 1
       end
-      return match, index, match
+      [match, index, match]
     end
 
     def match_this(defined, incoming)
-      match = []; index = 0;
+      match = []
+      index = 0
       defined_route = defined.split("/")
       incoming_route = incoming.split("/")
 
       return false if defined_route.size < incoming_route.size
 
       defined_route.each do |route_elt|
-        pending_match = true; matched = false; optional = 0;
+        pending_match = true
+        optional = 0
         incoming_elt = incoming_route[index]
 
         while pending_match
           matched = match_components(route_elt, incoming_elt)
           pending_match = false
-          route_elt, optional, pending_match = match_begin_of_optional_components(route_elt, optional) unless matched || pending_match
-          route_elt, optional, pending_match = match_end_of_optional_components(route_elt, optional) unless matched || pending_match
-          matched, index, pending_match = match_optional_components(matched, optional, index) unless matched || pending_match
+          unless matched || pending_match
+            route_elt, optional, pending_match =
+            match_begin_of_optional_components(route_elt, optional)
+          end
+
+          unless matched || pending_match
+            route_elt, optional, pending_match =
+            match_end_of_optional_components(route_elt, optional)
+          end
+
+          unless matched || pending_match
+            matched, index, pending_match =
+            match_optional_components(matched, optional, index)
+          end
         end
 
         match << matched

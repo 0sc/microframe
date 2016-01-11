@@ -13,17 +13,17 @@ module Microframe
 
       def process_select(queryhash)
         queryhash["SELECT"] ||= ["*"]
-        "SELECT #{queryhash["SELECT"].join(", ")}"
+        "SELECT #{queryhash['SELECT'].join(', ')}"
       end
 
       def process_from(queryhash)
         queryhash["FROM"] ||= table_name
-        "FROM #{queryhash["FROM"]}"
+        "FROM #{queryhash['FROM']}"
       end
 
       def process_where(queryhash)
         return "" unless queryhash["WHERE"]
-        "WHERE #{queryhash["WHERE"].join(" AND ")}"
+        "WHERE #{queryhash['WHERE'].join(' AND ')}"
       end
 
       def process_generic(name, queryhash)
@@ -40,12 +40,18 @@ module Microframe
       end
 
       def query_processes
-        [:process_select, :process_from, :process_where, :process_order, :process_limit]
+        [
+          :process_select,
+          :process_from,
+          :process_where,
+          :process_order,
+          :process_limit
+        ]
       end
 
       def build_query(queryhash)
         query = []
-        query_processes.each { |process| query << send(process, queryhash)}
+        query_processes.each { |process| query << send(process, queryhash) }
         query.join(" ").strip
       end
 

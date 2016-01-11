@@ -1,4 +1,4 @@
-require File.join(__dir__,"query_utils")
+require File.join(__dir__, "query_utils")
 
 module Microframe
   module ORM
@@ -15,8 +15,8 @@ module Microframe
 
       def where(options)
         sql = []
-        options.each {|key, val| sql << "#{key.to_s} = '#{val}'"}
-        add_query("WHERE",  sql.join(" AND "))
+        options.each { |key, val| sql << "#{key} = '#{val}'" }
+        add_query("WHERE", sql.join(" AND "))
       end
 
       def all(val = "*")
@@ -46,9 +46,9 @@ module Microframe
         self
       end
 
-      def add_query(field, condition)
+      def add_query(field, val)
         @queryset ||= {}
-        @queryset[field] = queryset[field] ?  queryset[field] << condition : [condition]
+        queryset[field] ? queryset[field] << val : @queryset[field] = [val]
         self
       end
 
