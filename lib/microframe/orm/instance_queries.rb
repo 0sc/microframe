@@ -6,7 +6,7 @@ module Microframe
         queryset = {}
         models_columns.each { |col| queryset[col] = send(col) }
         validate(queryset)
-        errors.empty? ? execute_save(queryset) : self
+        errors.empty? ? execute_save(queryset) : false
       end
 
       def update(options = {})

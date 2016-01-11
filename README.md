@@ -169,7 +169,7 @@ validates :name, uniqueness: true
 
 You can also have multiple conditions in one line:
 ```ruby
-validates :name,  presence: true, length: { maximum: 50 }, uniqueness: true, with: :super_name
+validates :name,  presence: true, length: { maximum: 50 }, uniqueness: true
 ```
 
 
