@@ -1,6 +1,6 @@
-require File.join(__dir__,"queryset")
-require File.join(__dir__,"relationships")
-require File.join(__dir__,"validation")
+require File.join(__dir__, "queryset")
+require File.join(__dir__, "relationships")
+require File.join(__dir__, "validation")
 
 module Microframe
   module ORM
@@ -15,13 +15,15 @@ module Microframe
         end
 
         def property(col_name, options = {})
+          pkey = "PRIMARY KEY AUTOINCREMENT"
           options[:type] = options[:type].to_s.upcase
           options[:nullable] = options[:nullable] ? "NULL" : "NOT NULL"
-          options[:primary_key] = options[:primary_key] ? "PRIMARY KEY AUTOINCREMENT" : ""
-          get_create_table_query << (col_name.to_s + " " + options.values.join(" "))
+          options[:primary_key] = options[:primary_key] ? pkey : ""
+          get_create_table_query << (col_name.to_s + " " +
+          options.values.join(" "))
         end
 
-        def validates(col, options={})
+        def validates(col, options = {})
           validators(table_name).add(col, options)
         end
 
@@ -30,7 +32,7 @@ module Microframe
         end
 
         def validators(table)
-          @@validation[table] = Validation.new(table_name) unless @@validation[table]
+          @@validation[table] ||= Validation.new(table_name)
           @@validation[table]
         end
 
@@ -38,13 +40,13 @@ module Microframe
           @@validation
         end
 
-
         def get_create_table_query
           @@create_table_query
         end
 
         def create_table
-          query = "CREATE TABLE IF NOT EXISTS #{table_name} (#{get_create_table_query.join(", ")})"
+          query = "CREATE TABLE IF NOT EXISTS #{table_name} "\
+          "(#{get_create_table_query.join(', ')})"
           if Connection.execute(query)
             @@create_table_query = []
             define_attributes
@@ -71,12 +73,12 @@ module Microframe
           end
         end
 
-        def create(options={})
+        def create(options = {})
           new(options).save
         end
 
         def table_name
-          self.to_s.downcase + "s"
+          to_s.downcase + "s"
         end
 
         def all

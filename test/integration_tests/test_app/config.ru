@@ -1,5 +1,5 @@
 APP_PATH = __dir__
-require  "bundler"
+require "bundler"
 Bundler.require
 
 ChecklistApplication = Microframe::Application.new

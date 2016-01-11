@@ -5,22 +5,28 @@ module Microframe
     def link_to(link, target, options = {})
       xtras = []
       if options[:method]
-        target = target.is_a?(String) ? target : "/#{target.class.to_s.downcase}s/#{target.id}"
-        options.each { |key, val| xtras << "#{key}='#{val}'" unless key == :method }
-        "<form action='#{target}' method='post'><input type='hidden' name='_method' value='#{options[:method]}'/><input type='submit' value='#{link}' #{xtras.join(" ")}/></form>"
+        unless target.is_a?(String)
+          target = "/#{target.class.to_s.downcase}s/#{target.id}"
+        end
+        options.each do |key, val|
+          xtras << "#{key}='#{val}'" unless key == :method
+        end
+        "<form action='#{target}' method='post'><input type='hidden' "\
+        "name='_method' value='#{options[:method]}'/><input type='submit' "\
+        "value='#{link}' #{xtras.join(' ')}/></form>"
       else
-        options.each { |key, val| xtras << "#{key}='#{val}'"}
-        "<a href = '#{target}' #{xtras.join(" ")} >#{link}</a>"
+        options.each { |key, val| xtras << "#{key}='#{val}'" }
+        "<a href = '#{target}' #{xtras.join(' ')} >#{link}</a>"
       end
     end
 
-    def form_for(target, link=nil, &block)
-      yield(FormHelper.new(target, link))
+    def form_for(target, link = nil, &block)
+      block.call(FormHelper.new(target, link))
     end
 
-    def image_tag(image, options={})
+    def image_tag(image, options = {})
       xtras = []
-      options.each {|key, val| xtras << "#{key} = '#{val}'"}
+      options.each { |key, val| xtras << "#{key} = '#{val}'" }
       img = File.join("images", image)
       "<img src = '/#{img}' #{xtras.join(' ')}/>"
     end

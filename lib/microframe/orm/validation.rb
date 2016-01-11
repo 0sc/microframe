@@ -3,9 +3,9 @@ module Microframe
     class Validation
       attr_reader :rules, :errors
       def initialize(table)
-       @rules = {}
-       @custom_rules = []
-       @model_obj = Module.const_get(table.capitalize.chop)
+        @rules = {}
+        @custom_rules = []
+        @model_obj = Module.const_get(table.capitalize.chop)
       end
 
       def presence(field, value, condition)
@@ -33,16 +33,17 @@ module Microframe
         end
 
         if condition[:in] && !condition[:in].member?(val_length)
-          add_error "#{field} length is not within the given range. (range is #{condition[:in]} characters)."
+          add_error "#{field} length is not within the given range. "\
+          "(range is #{condition[:in]} characters)."
         end
 
         if condition[:is] && val_length != condition[:is]
-          add_error "#{field} length is not the expected length (expected length is #{condition[:is]} characters)."
+          add_error "#{field} length is not the expected length "\
+          "(expected length is #{condition[:is]} characters)."
         end
-
       end
 
-      def inclusion(field, value, condition)
+      def inclusion(_field, value, condition)
         if condition[:in] && !condition[:in].include?(value)
           add_error "#{value} is not included in the list."
         end
@@ -52,7 +53,7 @@ module Microframe
         end
       end
 
-      def exclusion(field, value, condition)
+      def exclusion(_field, value, condition)
         if condition[:in] && condition[:in].include?(value)
           add_error "#{value} is reserved."
         end
@@ -75,16 +76,20 @@ module Microframe
           add_error "#{field} must be greater than #{condition[:greater_than]}."
         end
 
-        if condition[:greater_than_or_equal_to] && value < condition[:greater_than_or_equal_to]
-          add_error "#{field} must be greater than or equal to #{condition[:greater_than_or_equal_to]}."
+        if condition[:greater_than_or_equal_to] &&
+           value < condition[:greater_than_or_equal_to]
+          add_error "#{field} must be greater than or equal "\
+          "to #{condition[:greater_than_or_equal_to]}."
         end
 
         if condition[:less_than] && value >= condition[:less_than]
           add_error "#{field} must be less than #{condition[:less_than]}."
         end
 
-        if condition[:less_than_or_equal_to] && value > condition[:less_than_or_equal_to]
-          add_error "#{field} must be less than or equal to #{condition[:less_than_or_equal_to]}."
+        if condition[:less_than_or_equal_to] &&
+           value > condition[:less_than_or_equal_to]
+          add_error "#{field} must be less than or equal "\
+          "to #{condition[:less_than_or_equal_to]}."
         end
       end
 
@@ -94,7 +99,7 @@ module Microframe
         end
       end
 
-      def with(field, value,condition)
+      def with(_field, _value, condition)
         @this_obj.send(condition)
       end
 

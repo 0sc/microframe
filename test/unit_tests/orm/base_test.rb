@@ -12,6 +12,6 @@ class BaseTest < Minitest::Test
   end
 
   def test_it_includes_instance_queries
-    [:save, :update, :destroy].each { |q| assert_respond_to @base, q}
+    [:save, :update, :destroy].each { |q| assert_respond_to @base, q }
   end
 end

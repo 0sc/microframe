@@ -80,10 +80,12 @@ class CreateItemsTest < CapybaraTestCase
     visit "/queries/1/1"
     refute_equal page.current_path, "/lists"
     assert page.has_content? "This list has 1 item"
-    assert page.has_content? "The name of the list this item belongs to is #{@@name}"
+    assert page.has_content? "The name of the list this "\
+    "item belongs to is #{@@name}"
     assert page.has_content? "Total lists: 1"
     assert page.has_content? "Done status of first item: true"
-    assert page.has_content? "And viola its changed Done status of first item: false"
+    assert page.has_content? "And viola its changed Done "\
+    "status of first item: false"
     assert page.has_content? "@item.destroy: this destroys the item"
     @@item_created = false
   end

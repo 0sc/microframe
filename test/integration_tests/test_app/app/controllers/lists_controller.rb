@@ -1,5 +1,4 @@
 class ListsController < Microframe::ApplicationController
-
   def index
     @lists = List.all
     render view: "index"
@@ -40,7 +39,6 @@ class ListsController < Microframe::ApplicationController
   end
 
   def test_view
-
   end
 
   def test_layout
@@ -56,5 +54,4 @@ class ListsController < Microframe::ApplicationController
   def list_params
     params["list"]
   end
-
 end

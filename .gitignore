@@ -8,3 +8,4 @@
 /spec/reports/
 /tmp/
 /test/integration_tests/test_app/db/*
+/index.html

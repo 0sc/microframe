@@ -5,5 +5,4 @@ class List < Microframe::ORM::Base
   create_table
 
   has_many :items
-
 end

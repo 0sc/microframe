@@ -3,11 +3,13 @@ require "application_controller"
 
 class ApplicationControllerTest < Minitest::Test
   def setup
-    @app = Microframe::ApplicationController.new(Sample.new, "controller", "action", Sample.new)
+    @app = Microframe::ApplicationController.new(
+      Sample.new, "controller", "action", Sample.new)
   end
 
   def test_default_rendered_view_option
-    assert_equal @app.default_render_option, view: "action", layout: "application"
+    assert_equal @app.default_render_option,
+                 view: "action", layout: "application"
   end
 
   def test_redirect_to
@@ -40,24 +42,32 @@ class ApplicationControllerTest < Minitest::Test
   end
 
   def test_get_layout_returns_given_file
-    assert_equal @app.get_layout(__FILE__), File.join(APP_PATH, "app", "views", "layouts", "#{__FILE__}.html.erb")
+    assert_equal @app.get_layout(__FILE__),
+                 File.join(APP_PATH, "app", "views",
+                           "layouts", "#{__FILE__}.html.erb")
   end
 
   def test_get_layout_returns_default
-    assert_equal @app.get_layout, File.join(APP_PATH, "app", "views", "layouts", "application.html.erb")
+    assert_equal @app.get_layout,
+                 File.join(APP_PATH, "app", "views",
+                           "layouts", "application.html.erb")
   end
 
   def test_set_instance_variables_for_views
     @app.instance_eval { @an_instance_var = "something" }
     refute_empty @app.set_instance_variables_for_views
-    assert_equal @app.set_instance_variables_for_views, "an_instance_var" => "something", "params" => nil
+    assert_equal @app.set_instance_variables_for_views,
+                 "an_instance_var" => "something", "params" => nil
   end
 
   def test_set_instance_variables_for_views_avoids_protect_vars
     @app.instance_eval { @an_instance_var = "something" }
     refute_empty @app.set_instance_variables_for_views
-    assert_equal @app.set_instance_variables_for_views, "params" => nil, "an_instance_var" => "something"
-    refute_includes @app.set_instance_variables_for_views, "session" => {}, "requests" => Sample.new, "response" => Sample.new
+    assert_equal @app.set_instance_variables_for_views,
+                 "params" => nil, "an_instance_var" => "something"
+    refute_includes @app.set_instance_variables_for_views,
+                    "session" => {},
+                    "requests" => Sample.new, "response" => Sample.new
   end
 
   def test_view_object

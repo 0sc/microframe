@@ -10,7 +10,7 @@ module Microframe
       end
 
       def update(options = {})
-        options.each{ |col, val| send("#{col}=", val) }
+        options.each { |col, val| send("#{col}=", val) }
         save
       end
 
@@ -30,7 +30,8 @@ module Microframe
         keys = queryset.keys.join(", ")
         values = queryset.values
         placeholders = Array.new(values.size, "?").join(", ")
-        result = Connection.connection.execute("REPLACE INTO #{table_name} (#{keys}) VALUES (#{placeholders})", values)
+        result = Connection.connection.execute("REPLACE INTO #{table_name} "\
+        "(#{keys}) VALUES (#{placeholders})", values)
         result ? self.class.last : self
       end
 

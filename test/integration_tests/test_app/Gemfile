@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "microframe"#, path: "../../../"
+gem "microframe", path: "../../../"
 gem "tilt"
 gem "sqlite3"
 gem "pry-nav"

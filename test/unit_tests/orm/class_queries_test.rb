@@ -11,11 +11,13 @@ class ClassQueriesTest < Minitest::Test
     @queries.property(:id, type: :integer, primary_key: true)
     assert @queries.get_create_table_query
     assert_equal 1, @queries.get_create_table_query.size
-    assert_equal @queries.get_create_table_query[0], "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL"
+    assert_equal @queries.get_create_table_query[0],
+                 "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL"
 
     @queries.property(:description, type: :text)
     assert_equal 2, @queries.get_create_table_query.size
-    assert_equal @queries.get_create_table_query[1], "description TEXT NOT NULL "
+    assert_equal @queries.get_create_table_query[1],
+                 "description TEXT NOT NULL "
 
     @queries.property(:done, type: :boolean)
     assert_equal 3, @queries.get_create_table_query.size
@@ -27,7 +29,10 @@ class ClassQueriesTest < Minitest::Test
   end
 
   def test_responds_to_class_queries
-    mtds = [:all, :find, :find_by, :where, :select, :count, :first, :last, :limit, :order, :destroy, :destroy_all]
-    mtds.each{ |mtd| assert_respond_to @queries, mtd }
+    mtds = [
+      :all, :find, :find_by, :where, :select, :count,
+      :first, :last, :limit, :order, :destroy, :destroy_all
+    ]
+    mtds.each { |mtd| assert_respond_to @queries, mtd }
   end
 end
