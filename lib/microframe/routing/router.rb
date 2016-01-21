@@ -3,11 +3,13 @@ require File.join(__dir__, "mapper")
 
 module Microframe
   class Router
-    attr_reader :routes, :mapper, :object
+    attr_reader :routes, :mapper, :object, :nesting_prefix
     attr_accessor :request, :response
 
     def initialize
       @routes = Hash.new
+      @nesting_prefix = {}
+      @nesting_tree = []
     end
 
     def handle_request
@@ -57,15 +59,23 @@ module Microframe
     end
 
     def resources(name)
-      name = name.to_s
-      get("/#{name}", to: "#{name}#index")
-      get("/#{name}/new", to: "#{name}#new")
-      get("/#{name}/:id", to: "#{name}#show")
-      get("/#{name}/:id/edit", to: "#{name}#edit")
-      post("/#{name}", to: "#{name}#create")
-      patch("/#{name}/:id", to: "#{name}#update")
-      put("/#{name}/:id", to: "#{name}#update")
-      delete("/#{name}/:id", to: "#{name}#destroy")
+      get("#{nesting_prefix[@nesting_tree.last]}/#{name}", to: "#{name}#index")
+      get("#{nesting_prefix[@nesting_tree.last]}/#{name}/new", to: "#{name}#new")
+      get("#{nesting_prefix[@nesting_tree.last]}/#{name}/:id", to: "#{name}#show")
+      get("#{nesting_prefix[@nesting_tree.last]}/#{name}/:id/edit", to: "#{name}#edit")
+      post("#{nesting_prefix[@nesting_tree.last]}/#{name}", to: "#{name}#create")
+      patch("#{nesting_prefix[@nesting_tree.last]}/#{name}/:id", to: "#{name}#update")
+      put("#{nesting_prefix[@nesting_tree.last]}/#{name}/:id", to: "#{name}#update")
+      delete "#{nesting_prefix[@nesting_tree.last]}/#{name}/:id", to: "#{name}#destroy"
+
+      if block_given?
+        prefix = "#{@nesting_tree.last}/#{name}/:#{name[0..-2]}_id"
+        @nesting_tree << name
+        @nesting_prefix[name] = prefix
+        yield
+        @nesting_prefix.delete(name)
+        @nesting_tree.pop
+      end
     end
 
     private
