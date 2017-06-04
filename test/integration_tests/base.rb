@@ -2,6 +2,7 @@ ENV["RACK_ENV"] = "test"
 
 require_relative "../test_helper"
 require "capybara"
+require 'capybara/dsl'
 require "sqlite3"
 require "erb"
 require "tilt"
